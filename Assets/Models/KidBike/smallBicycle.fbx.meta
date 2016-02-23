@@ -1,0 +1,147 @@
+fileFormatVersion: 2
+guid: 661d89ff6e66841c88547fa026164740
+timeCreated: 1456246435
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: BackWheel
+    100002: Base
+    100004: Camera
+    100006: Chair
+    100008: ChairHolder
+    100010: FrontWheel
+    100012: Lamp
+    100014: Screw_01
+    100016: Screw_02
+    100018: Screw_03
+    100020: Screw_04
+    100022: Screw_05
+    100024: Screw_06
+    100026: Screw_07
+    100028: Screw_08
+    100030: //RootNode
+    100032: SteeringWheel
+    400000: BackWheel
+    400002: Base
+    400004: Camera
+    400006: Chair
+    400008: ChairHolder
+    400010: FrontWheel
+    400012: Lamp
+    400014: Screw_01
+    400016: Screw_02
+    400018: Screw_03
+    400020: Screw_04
+    400022: Screw_05
+    400024: Screw_06
+    400026: Screw_07
+    400028: Screw_08
+    400030: //RootNode
+    400032: SteeringWheel
+    2300000: BackWheel
+    2300002: Base
+    2300004: Chair
+    2300006: ChairHolder
+    2300008: FrontWheel
+    2300010: Screw_01
+    2300012: Screw_02
+    2300014: Screw_03
+    2300016: Screw_04
+    2300018: Screw_05
+    2300020: Screw_06
+    2300022: Screw_07
+    2300024: Screw_08
+    2300026: SteeringWheel
+    3300000: BackWheel
+    3300002: Base
+    3300004: Chair
+    3300006: ChairHolder
+    3300008: FrontWheel
+    3300010: Screw_01
+    3300012: Screw_02
+    3300014: Screw_03
+    3300016: Screw_04
+    3300018: Screw_05
+    3300020: Screw_06
+    3300022: Screw_07
+    3300024: Screw_08
+    3300026: SteeringWheel
+    4300000: Base
+    4300002: Screw_07
+    4300004: Screw_02
+    4300006: Screw_03
+    4300008: Screw_06
+    4300010: Screw_01
+    4300012: BackWheel
+    4300014: SteeringWheel
+    4300016: Screw_08
+    4300018: Screw_05
+    4300020: Screw_04
+    4300022: FrontWheel
+    4300024: ChairHolder
+    4300026: Chair
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
