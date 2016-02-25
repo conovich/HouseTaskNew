@@ -1,0 +1,636 @@
+fileFormatVersion: 2
+guid: 9c815475bbf50479aa126ea4871357d8
+timeCreated: 1456417808
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: group4
+    100004: pasted__
+    100006: pasted__ 1
+    100008: pasted__ 10
+    100010: pasted__ 11
+    100012: pasted__ 12
+    100014: pasted__ 13
+    100016: pasted__ 14
+    100018: pasted__ 15
+    100020: pasted__ 16
+    100022: pasted__ 17
+    100024: pasted__ 18
+    100026: pasted__ 19
+    100028: pasted__ 2
+    100030: pasted__ 20
+    100032: pasted__ 21
+    100034: pasted__ 22
+    100036: pasted__ 23
+    100038: pasted__ 24
+    100040: pasted__ 25
+    100042: pasted__ 26
+    100044: pasted__ 27
+    100046: pasted__ 28
+    100048: pasted__ 29
+    100050: pasted__ 3
+    100052: pasted__ 30
+    100054: pasted__ 31
+    100056: pasted__ 32
+    100058: pasted__ 33
+    100060: pasted__ 34
+    100062: pasted__ 35
+    100064: pasted__ 36
+    100066: pasted__ 37
+    100068: pasted__ 38
+    100070: pasted__ 39
+    100072: pasted__ 4
+    100074: pasted__ 40
+    100076: pasted__ 41
+    100078: pasted__ 42
+    100080: pasted__ 43
+    100082: pasted__ 44
+    100084: pasted__ 45
+    100086: pasted__ 46
+    100088: pasted__ 47
+    100090: pasted__ 48
+    100092: pasted__ 49
+    100094: pasted__ 5
+    100096: pasted__ 50
+    100098: pasted__ 51
+    100100: pasted__ 52
+    100102: pasted__ 53
+    100104: pasted__ 54
+    100106: pasted__ 55
+    100108: pasted__ 56
+    100110: pasted__ 57
+    100112: pasted__ 58
+    100114: pasted__ 59
+    100116: pasted__ 6
+    100118: pasted__ 60
+    100120: pasted__ 61
+    100122: pasted__ 62
+    100124: pasted__ 63
+    100126: pasted__ 64
+    100128: pasted__ 65
+    100130: pasted__ 66
+    100132: pasted__ 67
+    100134: pasted__ 68
+    100136: pasted__ 69
+    100138: pasted__ 7
+    100140: pasted__ 70
+    100142: pasted__ 71
+    100144: pasted__ 72
+    100146: pasted__ 73
+    100148: pasted__ 74
+    100150: pasted__ 75
+    100152: pasted__ 76
+    100154: pasted__ 77
+    100156: pasted__ 78
+    100158: pasted__ 79
+    100160: pasted__ 8
+    100162: pasted__ 80
+    100164: pasted__ 81
+    100166: pasted__ 82
+    100168: pasted__ 83
+    100170: pasted__ 84
+    100172: pasted__ 85
+    100174: pasted__ 86
+    100176: pasted__ 87
+    100178: pasted__ 88
+    100180: pasted__ 89
+    100182: pasted__ 9
+    100184: pasted__ 90
+    100186: pasted__ 91
+    100188: pasted__ 92
+    100190: pasted__ 93
+    100192: pasted__ 94
+    100194: pasted___
+    100196: pasted__Box03
+    100198: pasted__Box04
+    100200: pasted__ChamferBox02
+    100202: pasted__ChamferBox03
+    100204: pasted__ChamferBox04
+    100206: pasted__ChamferCyl01
+    100208: pasted__ChamferCyl19
+    100210: pasted__Rectangle03
+    100212: pasted__Rectangle05
+    100214: pasted__Rectangle28
+    100216: pasted__Rectangle29
+    100218: pasted__Rectangle30
+    100220: pasted__Rectangle31
+    100222: pasted__Rectangle32
+    100224: pasted__Rectangle33
+    100226: pasted__Rectangle35
+    100228: pasted__Rychka_09
+    100230: pasted__Rychka_10
+    400000: //RootNode
+    400002: group4
+    400004: pasted__
+    400006: pasted__ 1
+    400008: pasted__ 10
+    400010: pasted__ 11
+    400012: pasted__ 12
+    400014: pasted__ 13
+    400016: pasted__ 14
+    400018: pasted__ 15
+    400020: pasted__ 16
+    400022: pasted__ 17
+    400024: pasted__ 18
+    400026: pasted__ 19
+    400028: pasted__ 2
+    400030: pasted__ 20
+    400032: pasted__ 21
+    400034: pasted__ 22
+    400036: pasted__ 23
+    400038: pasted__ 24
+    400040: pasted__ 25
+    400042: pasted__ 26
+    400044: pasted__ 27
+    400046: pasted__ 28
+    400048: pasted__ 29
+    400050: pasted__ 3
+    400052: pasted__ 30
+    400054: pasted__ 31
+    400056: pasted__ 32
+    400058: pasted__ 33
+    400060: pasted__ 34
+    400062: pasted__ 35
+    400064: pasted__ 36
+    400066: pasted__ 37
+    400068: pasted__ 38
+    400070: pasted__ 39
+    400072: pasted__ 4
+    400074: pasted__ 40
+    400076: pasted__ 41
+    400078: pasted__ 42
+    400080: pasted__ 43
+    400082: pasted__ 44
+    400084: pasted__ 45
+    400086: pasted__ 46
+    400088: pasted__ 47
+    400090: pasted__ 48
+    400092: pasted__ 49
+    400094: pasted__ 5
+    400096: pasted__ 50
+    400098: pasted__ 51
+    400100: pasted__ 52
+    400102: pasted__ 53
+    400104: pasted__ 54
+    400106: pasted__ 55
+    400108: pasted__ 56
+    400110: pasted__ 57
+    400112: pasted__ 58
+    400114: pasted__ 59
+    400116: pasted__ 6
+    400118: pasted__ 60
+    400120: pasted__ 61
+    400122: pasted__ 62
+    400124: pasted__ 63
+    400126: pasted__ 64
+    400128: pasted__ 65
+    400130: pasted__ 66
+    400132: pasted__ 67
+    400134: pasted__ 68
+    400136: pasted__ 69
+    400138: pasted__ 7
+    400140: pasted__ 70
+    400142: pasted__ 71
+    400144: pasted__ 72
+    400146: pasted__ 73
+    400148: pasted__ 74
+    400150: pasted__ 75
+    400152: pasted__ 76
+    400154: pasted__ 77
+    400156: pasted__ 78
+    400158: pasted__ 79
+    400160: pasted__ 8
+    400162: pasted__ 80
+    400164: pasted__ 81
+    400166: pasted__ 82
+    400168: pasted__ 83
+    400170: pasted__ 84
+    400172: pasted__ 85
+    400174: pasted__ 86
+    400176: pasted__ 87
+    400178: pasted__ 88
+    400180: pasted__ 89
+    400182: pasted__ 9
+    400184: pasted__ 90
+    400186: pasted__ 91
+    400188: pasted__ 92
+    400190: pasted__ 93
+    400192: pasted__ 94
+    400194: pasted___
+    400196: pasted__Box03
+    400198: pasted__Box04
+    400200: pasted__ChamferBox02
+    400202: pasted__ChamferBox03
+    400204: pasted__ChamferBox04
+    400206: pasted__ChamferCyl01
+    400208: pasted__ChamferCyl19
+    400210: pasted__Rectangle03
+    400212: pasted__Rectangle05
+    400214: pasted__Rectangle28
+    400216: pasted__Rectangle29
+    400218: pasted__Rectangle30
+    400220: pasted__Rectangle31
+    400222: pasted__Rectangle32
+    400224: pasted__Rectangle33
+    400226: pasted__Rectangle35
+    400228: pasted__Rychka_09
+    400230: pasted__Rychka_10
+    2300000: pasted__
+    2300002: pasted__ 1
+    2300004: pasted__ 10
+    2300006: pasted__ 11
+    2300008: pasted__ 12
+    2300010: pasted__ 13
+    2300012: pasted__ 14
+    2300014: pasted__ 15
+    2300016: pasted__ 16
+    2300018: pasted__ 17
+    2300020: pasted__ 18
+    2300022: pasted__ 19
+    2300024: pasted__ 2
+    2300026: pasted__ 20
+    2300028: pasted__ 21
+    2300030: pasted__ 22
+    2300032: pasted__ 23
+    2300034: pasted__ 24
+    2300036: pasted__ 25
+    2300038: pasted__ 26
+    2300040: pasted__ 27
+    2300042: pasted__ 28
+    2300044: pasted__ 29
+    2300046: pasted__ 3
+    2300048: pasted__ 30
+    2300050: pasted__ 31
+    2300052: pasted__ 32
+    2300054: pasted__ 33
+    2300056: pasted__ 34
+    2300058: pasted__ 35
+    2300060: pasted__ 36
+    2300062: pasted__ 37
+    2300064: pasted__ 38
+    2300066: pasted__ 39
+    2300068: pasted__ 40
+    2300070: pasted__ 41
+    2300072: pasted__ 42
+    2300074: pasted__ 43
+    2300076: pasted__ 44
+    2300078: pasted__ 45
+    2300080: pasted__ 46
+    2300082: pasted__ 47
+    2300084: pasted__ 48
+    2300086: pasted__ 49
+    2300088: pasted__ 50
+    2300090: pasted__ 51
+    2300092: pasted__ 52
+    2300094: pasted__ 53
+    2300096: pasted__ 54
+    2300098: pasted__ 55
+    2300100: pasted__ 56
+    2300102: pasted__ 57
+    2300104: pasted__ 58
+    2300106: pasted__ 59
+    2300108: pasted__ 60
+    2300110: pasted__ 61
+    2300112: pasted__ 62
+    2300114: pasted__ 63
+    2300116: pasted__ 64
+    2300118: pasted__ 65
+    2300120: pasted__ 66
+    2300122: pasted__ 67
+    2300124: pasted__ 68
+    2300126: pasted__ 69
+    2300128: pasted__ 7
+    2300130: pasted__ 70
+    2300132: pasted__ 71
+    2300134: pasted__ 72
+    2300136: pasted__ 73
+    2300138: pasted__ 74
+    2300140: pasted__ 75
+    2300142: pasted__ 76
+    2300144: pasted__ 77
+    2300146: pasted__ 78
+    2300148: pasted__ 79
+    2300150: pasted__ 8
+    2300152: pasted__ 80
+    2300154: pasted__ 81
+    2300156: pasted__ 82
+    2300158: pasted__ 83
+    2300160: pasted__ 84
+    2300162: pasted__ 85
+    2300164: pasted__ 86
+    2300166: pasted__ 87
+    2300168: pasted__ 88
+    2300170: pasted__ 89
+    2300172: pasted__ 9
+    2300174: pasted__ 90
+    2300176: pasted__ 91
+    2300178: pasted__ 92
+    2300180: pasted__ 93
+    2300182: pasted__ 94
+    2300184: pasted___
+    2300186: pasted__Box03
+    2300188: pasted__Box04
+    2300190: pasted__ChamferBox02
+    2300192: pasted__ChamferBox03
+    2300194: pasted__ChamferBox04
+    2300196: pasted__ChamferCyl01
+    2300198: pasted__ChamferCyl19
+    2300200: pasted__Rectangle03
+    2300202: pasted__Rectangle05
+    2300204: pasted__Rectangle28
+    2300206: pasted__Rectangle29
+    2300208: pasted__Rectangle30
+    2300210: pasted__Rectangle31
+    2300212: pasted__Rectangle32
+    2300214: pasted__Rectangle33
+    2300216: pasted__Rectangle35
+    2300218: pasted__Rychka_09
+    2300220: pasted__Rychka_10
+    3300000: pasted__
+    3300002: pasted__ 1
+    3300004: pasted__ 10
+    3300006: pasted__ 11
+    3300008: pasted__ 12
+    3300010: pasted__ 13
+    3300012: pasted__ 14
+    3300014: pasted__ 15
+    3300016: pasted__ 16
+    3300018: pasted__ 17
+    3300020: pasted__ 18
+    3300022: pasted__ 19
+    3300024: pasted__ 2
+    3300026: pasted__ 20
+    3300028: pasted__ 21
+    3300030: pasted__ 22
+    3300032: pasted__ 23
+    3300034: pasted__ 24
+    3300036: pasted__ 25
+    3300038: pasted__ 26
+    3300040: pasted__ 27
+    3300042: pasted__ 28
+    3300044: pasted__ 29
+    3300046: pasted__ 3
+    3300048: pasted__ 30
+    3300050: pasted__ 31
+    3300052: pasted__ 32
+    3300054: pasted__ 33
+    3300056: pasted__ 34
+    3300058: pasted__ 35
+    3300060: pasted__ 36
+    3300062: pasted__ 37
+    3300064: pasted__ 38
+    3300066: pasted__ 39
+    3300068: pasted__ 40
+    3300070: pasted__ 41
+    3300072: pasted__ 42
+    3300074: pasted__ 43
+    3300076: pasted__ 44
+    3300078: pasted__ 45
+    3300080: pasted__ 46
+    3300082: pasted__ 47
+    3300084: pasted__ 48
+    3300086: pasted__ 49
+    3300088: pasted__ 50
+    3300090: pasted__ 51
+    3300092: pasted__ 52
+    3300094: pasted__ 53
+    3300096: pasted__ 54
+    3300098: pasted__ 55
+    3300100: pasted__ 56
+    3300102: pasted__ 57
+    3300104: pasted__ 58
+    3300106: pasted__ 59
+    3300108: pasted__ 60
+    3300110: pasted__ 61
+    3300112: pasted__ 62
+    3300114: pasted__ 63
+    3300116: pasted__ 64
+    3300118: pasted__ 65
+    3300120: pasted__ 66
+    3300122: pasted__ 67
+    3300124: pasted__ 68
+    3300126: pasted__ 69
+    3300128: pasted__ 7
+    3300130: pasted__ 70
+    3300132: pasted__ 71
+    3300134: pasted__ 72
+    3300136: pasted__ 73
+    3300138: pasted__ 74
+    3300140: pasted__ 75
+    3300142: pasted__ 76
+    3300144: pasted__ 77
+    3300146: pasted__ 78
+    3300148: pasted__ 79
+    3300150: pasted__ 8
+    3300152: pasted__ 80
+    3300154: pasted__ 81
+    3300156: pasted__ 82
+    3300158: pasted__ 83
+    3300160: pasted__ 84
+    3300162: pasted__ 85
+    3300164: pasted__ 86
+    3300166: pasted__ 87
+    3300168: pasted__ 88
+    3300170: pasted__ 89
+    3300172: pasted__ 9
+    3300174: pasted__ 90
+    3300176: pasted__ 91
+    3300178: pasted__ 92
+    3300180: pasted__ 93
+    3300182: pasted__ 94
+    3300184: pasted___
+    3300186: pasted__Box03
+    3300188: pasted__Box04
+    3300190: pasted__ChamferBox02
+    3300192: pasted__ChamferBox03
+    3300194: pasted__ChamferBox04
+    3300196: pasted__ChamferCyl01
+    3300198: pasted__ChamferCyl19
+    3300200: pasted__Rectangle03
+    3300202: pasted__Rectangle05
+    3300204: pasted__Rectangle28
+    3300206: pasted__Rectangle29
+    3300208: pasted__Rectangle30
+    3300210: pasted__Rectangle31
+    3300212: pasted__Rectangle32
+    3300214: pasted__Rectangle33
+    3300216: pasted__Rectangle35
+    3300218: pasted__Rychka_09
+    3300220: pasted__Rychka_10
+    4300000: pasted__
+    4300002: pasted__
+    4300004: pasted__
+    4300006: pasted__
+    4300008: pasted__
+    4300010: pasted__
+    4300012: pasted__
+    4300014: pasted__
+    4300016: pasted__
+    4300018: pasted__
+    4300020: pasted__
+    4300022: pasted__
+    4300024: pasted__
+    4300026: pasted__
+    4300028: pasted__
+    4300030: pasted__
+    4300032: pasted__
+    4300034: pasted__
+    4300036: pasted__
+    4300038: pasted__
+    4300040: pasted__
+    4300042: pasted__
+    4300044: pasted__
+    4300046: pasted__
+    4300048: pasted__
+    4300050: pasted__
+    4300052: pasted__
+    4300054: pasted__
+    4300056: pasted__
+    4300058: pasted__
+    4300060: pasted__
+    4300062: pasted__
+    4300064: pasted__
+    4300066: pasted__
+    4300068: pasted__
+    4300070: pasted__
+    4300072: pasted__
+    4300074: pasted__
+    4300076: pasted__
+    4300078: pasted__
+    4300080: pasted__
+    4300082: pasted__
+    4300084: pasted__
+    4300086: pasted__
+    4300088: pasted__
+    4300090: pasted__
+    4300092: pasted__
+    4300094: pasted__
+    4300096: pasted__
+    4300098: pasted__
+    4300100: pasted__
+    4300102: pasted__
+    4300104: pasted__
+    4300106: pasted__
+    4300108: pasted__
+    4300110: pasted__
+    4300112: pasted__
+    4300114: pasted__
+    4300116: pasted__
+    4300118: pasted__
+    4300120: pasted__
+    4300122: pasted__
+    4300124: pasted__
+    4300126: pasted__
+    4300128: pasted__
+    4300130: pasted__
+    4300132: pasted__
+    4300134: pasted__
+    4300136: pasted__
+    4300138: pasted__
+    4300140: pasted__
+    4300142: pasted__
+    4300144: pasted__
+    4300146: pasted__
+    4300148: pasted__
+    4300150: pasted__
+    4300152: pasted__
+    4300154: pasted__
+    4300156: pasted__
+    4300158: pasted__
+    4300160: pasted__
+    4300162: pasted__
+    4300164: pasted__
+    4300166: pasted__
+    4300168: pasted__
+    4300170: pasted__
+    4300172: pasted___
+    4300174: pasted__
+    4300176: pasted__
+    4300178: pasted__
+    4300180: pasted__
+    4300182: pasted__
+    4300184: pasted__
+    4300186: pasted__Rychka_10
+    4300188: pasted__Rychka_09
+    4300190: pasted__ChamferBox02
+    4300192: pasted__ChamferCyl01
+    4300194: pasted__ChamferCyl19
+    4300196: pasted__Rectangle03
+    4300198: pasted__Rectangle28
+    4300200: pasted__Rectangle29
+    4300202: pasted__Rectangle30
+    4300204: pasted__Rectangle31
+    4300206: pasted__Rectangle32
+    4300208: pasted__Rectangle33
+    4300210: pasted__Rectangle35
+    4300212: pasted__ChamferBox03
+    4300214: pasted__Rectangle05
+    4300216: pasted__Box03
+    4300218: pasted__Box04
+    4300220: pasted__ChamferBox04
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
