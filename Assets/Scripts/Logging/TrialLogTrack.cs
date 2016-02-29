@@ -16,15 +16,29 @@ public class TrialLogTrack : LogTrack {
 	}
 
 	//gets called from trial controller instead of in update!
-	public void Log(int trialNumber){
+	public void LogTrialInfo(int trialNumber, Trial trial){
 		if (ExperimentSettings.isLogging) {
-			LogTrial (trialNumber);
+			LogTrialNum (trialNumber);
+			LogTrialTrajectory(trial.myTrajectory.startLoc.name, trial.myTrajectory.endLoc.name);
 		}
 	}
 
 	//LOGGED ON THE START OF THE TRIAL.
-	void LogTrial(int trialNumber){
+	void LogTrialNum(int trialNumber){
 		subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount(), "Trial Info" + separator + "NUM_TRIALS" + separator + trialNumber);
+	}
+	
+	void LogTrialTrajectory(string startLocation, string endLocation){
+		subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount(), "Trial Info" + separator + "TRIAL_TRAJECTORY_START" + separator + startLocation + separator + "TRIAL_TRAJECTORY_END" + separator + endLocation);
+	}
+
+	void LogTrialType(bool is3DFirst){
+		if(is3DFirst){
+			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount(), "Trial Info" + separator + "TRIAL_TYPE" + separator + "3DFIRST");
+		}
+		else{
+			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount(), "Trial Info" + separator + "TRIAL_TYPE" + separator + "2DFIRST");
+		}
 	}
 
 
@@ -96,7 +110,6 @@ public class TrialLogTrack : LogTrack {
 
 
 	//THE FOLLOWING ARE EVENTS
-
 	public void LogPauseEvent(bool isPaused){
 		subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), gameObject.name + separator + "TASK_PAUSED" + separator + isPaused); //logged for replay
 		subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "TASK_PAUSED" + separator + isPaused); //logged for parsing events
@@ -110,59 +123,68 @@ public class TrialLogTrack : LogTrack {
 		}
 	}
 
-	public void LogBeginningExplorationEvent(){
+	public void LogLearningExplorationEvent(bool isStarting){
 		if (ExperimentSettings.isLogging) {
-			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "FREE_EXPLORATION_STARTED");
-			Debug.Log ("Logged exploration event.");
+			if(isStarting){
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "LEARNING_EXPLORATION_STARTED");
+				Debug.Log ("Logged learning event.");
+			}
+			else{
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "LEARNING_EXPLORATION_ENDED");
+				Debug.Log ("Logged learning event.");
+			}
 		}
 	}
 
-	public void LogTransportationToHomeEvent(){
+	public void LogFirstPersonTrial(bool isStarting){
 		if (ExperimentSettings.isLogging) {
-			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "HOMEBASE_TRANSPORT_STARTED");
-			Debug.Log ("Logged home transport event.");
+			if(isStarting){
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "3DTRIAL_STARTED");
+				Debug.Log ("Logged 3D trial started event.");
+			}
+			else{
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "3DTRIAL_ENDED");
+				Debug.Log ("Logged 3D trial ended event.");
+			}
 		}
 	}
 
-	public void LogTransportationToTowerEvent(){
+	public void LogOverheadTrial(bool isStarting){
 		if (ExperimentSettings.isLogging) {
-			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "TOWER_TRANSPORT_STARTED");
-			Debug.Log ("Logged tower transport event.");
+			if(isStarting){
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "2DTRIAL_STARTED");
+				Debug.Log ("Logged 2D trial started event.");
+			}
+			else{
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "2DTRIAL_ENDED");
+				Debug.Log ("Logged 2D trial ended event.");
+			}
 		}
 	}
 
-	public void LogTrialNavigationStarted(){
+	public void LogTrialNavigation(bool isStarting){
 		if (ExperimentSettings.isLogging) {
-			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "TRIAL_NAVIGATION_STARTED");
-			Debug.Log ("Logged nav started event.");
+			if(isStarting){
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "TRIAL_NAVIGATION_STARTED");
+				Debug.Log ("Logged nav started event.");
+			}
+			else{
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "TRIAL_NAVIGATION_ENDED");
+				Debug.Log ("Logged nav ended event.");
+			}
 		}
 	}
 
-	public void LogDistractorGameStarted(){
+	public void LogFeedback(bool isStarting){
 		if (ExperimentSettings.isLogging) {
-			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "DISTRACTOR_GAME_STARTED");
-			Debug.Log ("Logged distractor game started event.");
-		}
-	}
-
-	public void LogRecallPhaseStarted(){
-		if (ExperimentSettings.isLogging) {
-			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "RECALL_PHASE_STARTED");
-			Debug.Log ("Logged recall started event.");
-		}
-	}
-
-	public void LogObjectToRecall(SpawnableObject spawnableToRecall){
-		if (ExperimentSettings.isLogging) {
-			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "RECALL_SPECIAL" + separator + spawnableToRecall.GetName ());
-			Debug.Log ("Logged object recall event.");
-		}
-	}
-
-	public void LogFeedbackStarted(){
-		if (ExperimentSettings.isLogging) {
-			subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "FEEDBACK_STARTED");
-			Debug.Log ("Logged feedback event.");
+			if(isStarting){
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "FEEDBACK_STARTED");
+				Debug.Log ("Logged feedback started event.");
+			}
+			else{
+				subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Trial Event" + separator + "FEEDBACK_ENDED");
+				Debug.Log ("Logged feedback started event.");
+			}
 		}
 	}
 

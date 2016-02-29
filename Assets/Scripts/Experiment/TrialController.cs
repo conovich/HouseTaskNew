@@ -41,12 +41,16 @@ public class TrialController : MonoBehaviour {
 		TrialList = new List<Trial> ();
 
 		for(int i = 0; i < Config.numTestTrials; i++){
-			Trial trial = new Trial();
+			bool is3Dfirst = true;
+			if(i % 2 == 0){
+				is3Dfirst = false;
+			}
+			Trial trial = new Trial(is3Dfirst);
 			TrialList.Add(trial);
 		}
 
 		if(Config.doPracticeTrial){
-			practiceTrial = new Trial();	//2 special objects for practice trial
+			practiceTrial = new Trial(true);	//2 special objects for practice trial
 		}
 
 	}
@@ -129,12 +133,10 @@ public class TrialController : MonoBehaviour {
 			yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction (Config.initialInstructions2, true, true, false, Config.minInitialInstructionsTime));
 
 			//let player explore until the button is pressed again
-			//TODO: LOG LEARNING INSTEAD OF EXPLORATION
-			trialLogger.LogBeginningExplorationEvent();
+			trialLogger.LogLearningExplorationEvent(true);
 			exp.player.controls.ShouldLockControls = false;
 			yield return StartCoroutine(WaitForLearningPhase());
-			//TODO: LOG LEARNING INSTEAD OF EXPLORATION
-			trialLogger.LogBeginningExplorationEvent();
+			trialLogger.LogLearningExplorationEvent(false);
 			//yield return StartCoroutine (exp.WaitForActionButton ());
 
 			exp.player.controls.ShouldLockControls = true;
@@ -231,51 +233,95 @@ public class TrialController : MonoBehaviour {
 		currentTrial = trial;
 
 		if (isPracticeTrial) {
-			trialLogger.Log (-1);
+			trialLogger.LogTrialInfo (-1, currentTrial);
 			Debug.Log("Logged practice trial.");
 		} 
 		else {
-			trialLogger.Log (numRealTrials);
+			trialLogger.LogTrialInfo (numRealTrials, currentTrial);
 			numRealTrials++;
 			Debug.Log("Logged trial #: " + numRealTrials);
 		}
 
-		//3D PHASE OF TRIAL
-
-		//START NAVIGATION
-		trialLogger.LogTrialNavigationStarted ();
-
-		//unlock avatar controls
-		exp.player.controls.ShouldLockControls = false;
-
-		//tell player where to go next
-		string goToLocationInstruction = "Please go to the " + trial.desiredItemLocation.name + " in the " + trial.desiredItemLocation.GetRoom().name;
-		exp.instructionsController.SetInstructionsTransparentOverlay();
-		exp.instructionsController.DisplayText(goToLocationInstruction);
-
-
-		//wait for player to hit target item
-		yield return StartCoroutine (exp.player.WaitForItemCollision (trial.desiredItemLocation));
-		exp.instructionsController.TurnOffInstructions();
-
-
-		//lock player movement
-		exp.player.controls.ShouldLockControls = true;
-
-		//OVERHEAD PHASE OF TRIAL
-		//TODO: log this!
-		exp.overheadMap.TurnOn(true);
-		exp.overheadMap.LockCursor(false);
-		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Place the cursor where you started, and then press (X).", false, true, false, 0.0f));
-
-		exp.overheadMap.mapCursor.StartPath();
-		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Show us the path you took to the " + trial.desiredItemLocation.name + ", and press (X) when finished.", false, true, false, 0.0f));
-		exp.overheadMap.LockCursor (true);
-		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Press (X) to continue to the next trial.", false, true, false, 0.0f));
-		exp.overheadMap.TurnOn(false);
+		if(trial.is3DFirst){
+			yield return StartCoroutine(Do3DPhase(true));
+			yield return StartCoroutine(Do2DPhase(false));
+		}
+		else{
+			yield return StartCoroutine(Do2DPhase(true));
+			yield return StartCoroutine(Do3DPhase(false));
+		}
 
 		//increment subject's trial count
 		ExperimentSettings.currentSubject.IncrementTrial ();
+	}
+
+	IEnumerator Do3DPhase(bool isStart){
+		trialLogger.LogFirstPersonTrial(true);
+		string goToLocationInstruction = "";
+
+		//TODO: move player to start location!
+		//exp.player.transform.position = currentTrial.myTrajectory.startLoc.transform.position;
+
+		if(isStart){
+			goToLocationInstruction = "Please go to the " + currentTrial.desiredItemLocation.name + ".";
+		}
+		else{
+			goToLocationInstruction = "Follow the same path to the " + currentTrial.desiredItemLocation.name + " that you took on the overhead map.";
+		}
+
+		//START NAVIGATION
+		trialLogger.LogTrialNavigation (true);
+		
+		//unlock avatar controls
+		exp.player.controls.ShouldLockControls = false;
+		
+		//tell player where to go next
+		exp.instructionsController.SetInstructionsTransparentOverlay();
+		exp.instructionsController.DisplayText(goToLocationInstruction);
+		
+		
+		//wait for player to hit target item
+		yield return StartCoroutine (exp.player.WaitForItemCollision (currentTrial.desiredItemLocation));
+		exp.instructionsController.TurnOffInstructions();
+		
+		
+		//lock player movement
+		exp.player.controls.ShouldLockControls = true;
+		trialLogger.LogTrialNavigation (false);
+
+		trialLogger.LogFirstPersonTrial(false);
+	}
+
+	IEnumerator Do2DPhase(bool isStart){
+		trialLogger.LogOverheadTrial(true);
+
+		string goToLocationInstruction = "";
+
+
+		if(isStart){
+			//TODO: put the player cursor in the right start location!!
+			goToLocationInstruction = "Please go to the " + currentTrial.desiredItemLocation.name + ".";
+		}
+		else{
+			goToLocationInstruction = "Show us the path you took to the " + currentTrial.desiredItemLocation.name + ", and press (X) when finished.";
+		}
+
+		exp.overheadMap.TurnOn(true);
+		trialLogger.LogTrialNavigation (true);
+		exp.overheadMap.LockCursor(false);
+		if(!isStart){
+			yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Place the cursor where you started, and then press (X).", false, true, false, 0.0f));
+		}
+		exp.overheadMap.mapCursor.StartPath();
+		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction(goToLocationInstruction, false, true, false, 0.0f));
+		exp.overheadMap.LockCursor (true);
+
+		trialLogger.LogTrialNavigation (false);
+
+		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Press (X) to continue to the next trial.", false, true, false, 0.0f));
+		exp.overheadMap.TurnOn(false);
+
+		trialLogger.LogOverheadTrial(false);
 	}
 
 	IEnumerator ShowFeedback(List<int> specialObjectOrder, List<Vector3> chosenPositions, List<bool> rememberResponses, List<bool> areYouSureResponses){
