@@ -28,8 +28,6 @@ public class TrialController : MonoBehaviour {
 	Trial currentTrial;
 	Trial practiceTrial;
 
-	[HideInInspector] public GameObject currentDefaultObject; //current treasure chest we're looking for. assuming a one-by-one reveal.
-
 	List<Trial> TrialList;
 
 	void Start(){
@@ -189,20 +187,21 @@ public class TrialController : MonoBehaviour {
 	IEnumerator WaitForLearningPhase(){
 		Debug.Log("Waiting for learning phase!");
 
-		//TODO: tell locator controller to spawn coins
-		exp.learningLocatorController.PlaceLocators ();
-
 		LearningTimer.SetTimerMaxTime(Config.totalLearningTime);
 		LearningTimer.StartTimer();
 		while(LearningTimer.IsRunning){
 			if(exp.learningLocatorController.GetActiveNumLocators() <= 0){
-				exp.learningLocatorController.PlaceLocators();
+				exp.learningLocatorController.ReActivateAllLocators();
+			}
+			float timePassed = Config.totalLearningTime - LearningTimer.GetSecondsFloat();
+			if(timePassed >= Config.learningTimeToPassUntilArrows && !exp.learningLocatorController.hasRegenerated){
+				exp.player.shouldUseArrows = true;
 			}
 			yield return 0;
 		}
 
 		//tell locator controller to delete the rest of the coins
-		exp.learningLocatorController.ClearLocators ();
+		exp.learningLocatorController.DeactivateAllLocators();
 	}
 
 	IEnumerator WaitForEEGHardwareConnection(){
@@ -229,6 +228,8 @@ public class TrialController : MonoBehaviour {
 	//INDIVIDUAL TRIALS -- implement for repeating the same thing over and over again
 	//could also create other IEnumerators for other types of trials
 	IEnumerator RunTrial(Trial trial){
+
+		exp.player.ResetGatesVisited();
 
 		currentTrial = trial;
 

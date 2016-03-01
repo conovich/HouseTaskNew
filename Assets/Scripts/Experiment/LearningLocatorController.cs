@@ -5,32 +5,91 @@ using System.Collections.Generic;
 public class LearningLocatorController : MonoBehaviour {
 	Experiment exp { get { return Experiment.Instance; } }
 
-	//TODO: have locator controller keep track of the coins.
+	public bool hasRegenerated = false;
+	//public LearningLocator closestLocatorToPlayer;
 
-	int TotalNumLocators = 10;
-	public GameObject locatorPrefab;
-
-	List<GameObject> locatorList;
+	List<LearningLocator> activeLocators;
+	LearningLocator[] locatorArray;
 
 	// Use this for initialization
 	void Start () {
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
+		InitLocators();
 	}
 
-	public int GetActiveNumLocators(){
-		if (locatorList == null) {
-			return 0;
-		} else {
-			return locatorList.Count;
+	void InitLocators(){
+		activeLocators = new List<LearningLocator>();
+		locatorArray = GetComponentsInChildren<LearningLocator>();
+		for(int i = 0; i < locatorArray.Length; i++){
+			activeLocators.Add(locatorArray[i]);
 		}
 	}
 
-	public void PlaceLocators(){
+	/*void SetClosestLocatorToPlayer(){
+		closestLocatorToPlayer = GetClosestLocator(exp.player.transform.position);
+	}*/
+
+	// Update is called once per frame
+	void Update () {
+		/*if(exp.player.shouldUseArrows){
+			SetClosestLocatorToPlayer();
+		}*/
+	}
+
+	public int GetActiveNumLocators(){
+		if (activeLocators == null) {
+			return 0;
+		} else {
+			return activeLocators.Count;
+		}
+	}
+
+	public void RemoveActiveLocator(LearningLocator locator){
+		activeLocators.Remove(locator);
+		/*if(locator == closestLocatorToPlayer){
+			SetClosestLocatorToPlayer();
+		}*/
+	}
+
+	public void ReActivateAllLocators(){
+		activeLocators.Clear();
+		for(int i = 0; i < locatorArray.Length; i++){
+			locatorArray[i].Activate();
+			activeLocators.Add(locatorArray[i]);
+		}
+	}
+
+	public void DeactivateAllLocators(){
+		for(int i = 0; i < locatorArray.Length; i++){
+			activeLocators.Clear();
+			locatorArray[i].Deactivate();
+		}
+	}
+
+	
+	/*LearningLocator GetClosestLocator(Vector3 position){
+		if(activeLocators.Count == 0){
+			return null;
+		}
+
+		int minIndex = 0;
+		float minDistance = -1;
+		for(int i = 0; i < activeLocators.Count; i++){
+			float distance = (activeLocators[i].transform.position - position).magnitude;
+
+			if(i == 0){
+				minDistance = distance;
+			}
+			else if(distance < minDistance){
+				minDistance = distance;
+				minIndex = i;
+			}
+		}
+		
+		return activeLocators[minIndex];
+	
+	}*/
+
+/*	public void PlaceLocators(){
 		if (locatorList == null) {
 			locatorList = new List<GameObject> ();
 		}
@@ -72,9 +131,9 @@ public class LearningLocatorController : MonoBehaviour {
 		}
 
 		Debug.Log(numLocatorsLeft);
-	}
+	}*/
 
-	public void RemoveLocator(GameObject locator){
+	/*public void RemoveLocator(GameObject locator){
 		int locatorIndex = locatorList.IndexOf (locator);
 		locatorList.RemoveAt (locatorIndex);
 		Destroy(locator);
@@ -89,5 +148,5 @@ public class LearningLocatorController : MonoBehaviour {
 				Destroy (locator);
 			}
 		}
-	}
+	}*/
 }

@@ -16,23 +16,32 @@ public class LearningLocator : MonoBehaviour {
 
 	void OnCollisionEnter(Collision collision){
 		if(collision.gameObject.tag == "Player"){
-			StartCoroutine(Die ());
+			StartCoroutine(OnPlayerCollision ());
 		}
 	}
 
-	IEnumerator Die(){
+	IEnumerator OnPlayerCollision(){
 		AudioSource myAudio = GetComponent<AudioSource>();
 		myAudio.Play ();
 
-		GetComponentInChildren<MeshRenderer>().enabled = false;
-		GetComponent<Collider>().enabled = false;
+		Deactivate();
 
 		while(myAudio.isPlaying){
 			yield return 0;
 		}
 
-		//this will also destroy the gameobject
-		exp.learningLocatorController.RemoveLocator (gameObject);
+		exp.learningLocatorController.RemoveActiveLocator (this);
 
+
+	}
+
+	public void Deactivate(){
+		GetComponentInChildren<MeshRenderer>().enabled = false;
+		GetComponent<Collider>().enabled = false;
+	}
+
+	public void Activate(){
+		GetComponentInChildren<MeshRenderer>().enabled = true;
+		GetComponent<Collider>().enabled = true;
 	}
 }

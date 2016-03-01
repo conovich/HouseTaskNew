@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour {
 
@@ -8,15 +9,25 @@ public class Player : MonoBehaviour {
 	public PlayerControls controls;
 	public GameObject visuals;
 
+	public List<Transform> roomsVisited;
+	public Transform currentRoom; //should set initially in scene!
 
-	float arrowAngleThreshold = 30.0f; //minimum (absolute) angle between player and chest before arrows should be turned on
+	List<Transform> gatesVisitedThisTrial;
+
+	public bool shouldUseArrows;
+
+	float arrowAngleThreshold = 0.0f; //minimum (absolute) angle between player and chest before arrows should be turned on
 	bool rightArrowsOn = true;
 	bool leftArrowsOn = true;
+	bool overheadArrowOn = true;
 
 	public GameObject rightArrows;
 	EnableChildrenLogTrack rightArrowEnableLog;
 	public GameObject leftArrows;
 	EnableChildrenLogTrack leftArrowEnableLog;
+	public GameObject overheadArrow;
+	public GameObject overheadArrowVisuals;
+	EnableChildrenLogTrack overheadArrowEnableLog;
 
 	ObjectLogTrack myObjLogTrack;
 	
@@ -25,30 +36,82 @@ public class Player : MonoBehaviour {
 	void Start () {
 		rightArrowEnableLog = rightArrows.GetComponent<EnableChildrenLogTrack> ();
 		leftArrowEnableLog = leftArrows.GetComponent<EnableChildrenLogTrack> ();
+		overheadArrowEnableLog = overheadArrow.GetComponent<EnableChildrenLogTrack> ();
 
 		TurnOnRightArrows (false);
 		TurnOnLeftArrows (false);
+		TurnOnOverheadArrow(false, transform);
 
 		myObjLogTrack = GetComponent<ObjectLogTrack> ();
+
+		roomsVisited = new List<Transform>();
+		gatesVisitedThisTrial = new List<Transform>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		SetArrows ();
+		if(shouldUseArrows){
+			SetArrows ();
+		}
 	}
 
 	public void TurnOnVisuals(bool isVisible){
 		visuals.SetActive (isVisible);
 	}
 
-	void SetArrows(){
-		if ( exp.trialController.currentDefaultObject ) {
-			Vector2 currentDefaultPosXZ = new Vector2 ( exp.trialController.currentDefaultObject.transform.position.x, exp.trialController.currentDefaultObject.transform.position.z );
+	List<Transform> GetUnvisitedRooms(){
+		//Get unvisited rooms
+		List<Transform> unvisitedRooms = new List<Transform>();
+		for(int i = 0; i < exp.houseController.RoomLocators.Length; i++){
+			if(!roomsVisited.Contains(exp.houseController.RoomLocators[i])){
+				unvisitedRooms.Add(exp.houseController.RoomLocators[i]);
+			}
+		}
 
-			float angleBetweenPlayerAndTreasure = controls.GetYAngleBetweenFacingDirAndObjectXZ( currentDefaultPosXZ );
+		return unvisitedRooms;
+	}
+
+	Transform GetClosestUnvisitedRoom(){
+
+		//get the list of unvisited rooms
+		List<Transform> unvisitedRooms = GetUnvisitedRooms();
+
+		//if there are no unvisited rooms, return null
+		if(unvisitedRooms.Count == 0){
+			return null;
+		}
+
+		//get the closest unvisited room
+		int minIndex = 0;
+		float minDistance = -1;
+		for(int i = 0; i < unvisitedRooms.Count; i++){
+			float distance = (unvisitedRooms[i].transform.position - transform.position).magnitude;
+			
+			if(i == 0){
+				minDistance = distance;
+			}
+			else if(distance < minDistance){
+				minDistance = distance;
+				minIndex = i;
+			}
+		}
+		
+		return unvisitedRooms[minIndex];
+		
+	}
+
+	void SetArrows(){
+		Transform closestRoom = GetClosestUnvisitedRoom();
+		if ( closestRoom != null ) {
+			Vector3 targetPos = closestRoom.transform.position;
+
+			float angleBetweenPlayerAndTreasure = controls.GetYAngleBetweenFacingDirAndObjectXZ( targetPos );
+
+			TurnOnOverheadArrow(true, closestRoom);
+			Debug.Log("Closest room: " + closestRoom.name);
 
 			//if the angle is bigger than the threshold, turn on the appropriate arrows
-			if( Mathf.Abs(angleBetweenPlayerAndTreasure) > arrowAngleThreshold){
+			/*if( Mathf.Abs(angleBetweenPlayerAndTreasure) > arrowAngleThreshold){
 				if(angleBetweenPlayerAndTreasure < 0){
 					TurnOnLeftArrows(true);
 					TurnOnRightArrows(false);
@@ -62,13 +125,28 @@ public class Player : MonoBehaviour {
 			else{
 				TurnOnLeftArrows(false);
 				TurnOnRightArrows(false);
-			}
+			}*/
 		}
 		else if(rightArrowsOn){
 			TurnOnRightArrows(false);
 		}
 		else if(leftArrowsOn){
 			TurnOnLeftArrows(false);
+		}
+		else if(overheadArrowOn){
+			TurnOnOverheadArrow(false, transform);
+		}
+	}
+
+	public void TurnOnOverheadArrow(bool shouldTurnOn, Transform transformToLookAt){
+		//only toggle them if they aren't in the shouldTurnOn state
+		if (overheadArrowOn == !shouldTurnOn) {
+			UsefulFunctions.EnableChildren (overheadArrow.transform, shouldTurnOn);
+			overheadArrowEnableLog.LogChildrenEnabled (shouldTurnOn);
+			overheadArrowOn = shouldTurnOn;
+		}
+		if(transformToLookAt != null){
+			overheadArrowVisuals.transform.LookAt(transformToLookAt);
 		}
 	}
 
@@ -88,6 +166,24 @@ public class Player : MonoBehaviour {
 			leftArrowEnableLog.LogChildrenEnabled (shouldTurnOn);
 			leftArrowsOn = shouldTurnOn;
 		}
+	}
+
+	void OnTriggerEnter(Collider collider){
+		if(collider.tag == "RoomLocator"){
+			if(!roomsVisited.Contains(collider.transform)){
+				roomsVisited.Add(collider.transform);
+			}
+			Debug.Log("Room entered: " + collider.name);
+			currentRoom = collider.transform;
+		}
+		else if(collider.tag == "Gate"){
+			gatesVisitedThisTrial.Add(collider.transform);
+			Debug.Log("Gate name: " + collider.name);
+		}
+	}
+
+	public void ResetGatesVisited(){
+		gatesVisitedThisTrial.Clear();
 	}
 
 	GameObject currentCollisionObject;
