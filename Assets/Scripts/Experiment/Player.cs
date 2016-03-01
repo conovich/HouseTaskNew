@@ -6,6 +6,8 @@ public class Player : MonoBehaviour {
 
 	Experiment exp { get { return Experiment.Instance; } }
 
+	PlayerEventLogTrack myPlayerLog;
+
 	public PlayerControls controls;
 	public GameObject visuals;
 
@@ -36,6 +38,8 @@ public class Player : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		myPlayerLog = GetComponent<PlayerEventLogTrack> ();
+
 		rightArrowEnableLog = rightArrows.GetComponent<EnableChildrenLogTrack> ();
 		leftArrowEnableLog = leftArrows.GetComponent<EnableChildrenLogTrack> ();
 		overheadArrowEnableLog = overheadArrow.GetComponent<EnableChildrenLogTrack> ();
@@ -182,10 +186,14 @@ public class Player : MonoBehaviour {
 			}
 			Debug.Log("Room entered: " + collider.name);
 			currentRoom = collider.transform;
+
+			myPlayerLog.LogCurrentRoom();
 		}
 		else if(collider.tag == "Gate"){
 			gatesVisitedThisTrial.Add(collider.transform);
 			Debug.Log("Gate name: " + collider.name);
+
+			myPlayerLog.LogGateCollision(collider.gameObject);
 		}
 	}
 
@@ -197,6 +205,8 @@ public class Player : MonoBehaviour {
 	void OnCollisionEnter(Collision collision){
 		if(collision.gameObject.tag == "LearningLocator"){
 			exp.scoreController.AddLocatorCollectedPoints();
+
+			myPlayerLog.LogPlayerCollision(collision.gameObject);
 		}
 
 		currentCollisionObject = collision.gameObject;
@@ -204,6 +214,8 @@ public class Player : MonoBehaviour {
 		//log store collision
 		if (collision.gameObject.tag == "ItemLocation"){
 			myObjLogTrack.LogCollision (collision.gameObject.name);
+
+			myPlayerLog.LogPlayerCollision(collision.gameObject);
 		}
 	}
 
