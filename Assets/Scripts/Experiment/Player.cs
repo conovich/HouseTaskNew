@@ -28,6 +28,8 @@ public class Player : MonoBehaviour {
 	public GameObject overheadArrow;
 	public GameObject overheadArrowVisuals;
 	EnableChildrenLogTrack overheadArrowEnableLog;
+	public GameObject groundArrowPosObj;
+	public bool isGroundArrow;
 
 	ObjectLogTrack myObjLogTrack;
 	
@@ -46,6 +48,11 @@ public class Player : MonoBehaviour {
 
 		roomsVisited = new List<Transform>();
 		gatesVisitedThisTrial = new List<Transform>();
+
+
+		if (isGroundArrow) {
+			overheadArrow.transform.position = groundArrowPosObj.transform.position;
+		}
 	}
 	
 	// Update is called once per frame
