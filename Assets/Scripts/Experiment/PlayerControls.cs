@@ -45,17 +45,33 @@ public class PlayerControls : MonoBehaviour{
 		}
 	}
 
-
+	public Camera myCamera;
+	public Transform movementTransform;
+	bool wasNotMoving = false;
 	void GetInput()
 	{
 		//VERTICAL
 		float verticalAxisInput = Input.GetAxis ("Vertical");
 		if ( Mathf.Abs(verticalAxisInput) > 0.0f) { //EPSILON should be accounted for in Input Settings "dead zone" parameter
-
-			GetComponent<Rigidbody>().velocity = transform.forward*verticalAxisInput*Config.driveSpeed; //since we are setting velocity based on input, no need for time.delta time component
-
+			Vector3 movementDir = transform.forward;
+			float angleDifference = 0;
+			if(wasNotMoving){
+				//align forward direction with main camera forward direction!
+				//myCamera.transform.parent = transform.parent;
+				Quaternion cameraRot = myCamera.transform.rotation;
+				angleDifference = movementTransform.rotation.eulerAngles.y - cameraRot.eulerAngles.y;
+				movementTransform.RotateAround(movementTransform.position, Vector3.up, -angleDifference);
+				movementDir = movementTransform.forward;
+				//transform.RotateAround(transform.position, Vector3.up, angleDifference);
+				//myCamera.transform.parent = transform;
+				//myCamera.transform.RotateAround(transform.position, Vector3.up, angleDifference);
+			}
+			wasNotMoving = false;
+			GetComponent<Rigidbody>().velocity = myCamera.transform.forward*verticalAxisInput*Config.driveSpeed; //since we are setting velocity based on input, no need for time.delta time component
+			//transform.RotateAround(transform.position, Vector3.up, angleDifference);
 		}
 		else{
+			wasNotMoving = true;
 			GetComponent<Rigidbody>().velocity = Vector3.zero;
 		}
 
