@@ -11,7 +11,7 @@ public class Config : MonoBehaviour {
 	public static Version BuildVersion = Version.ExpName; //TODO: change this for your experiment!
 	public static string VersionNumber = "2.03"; //TODO: change this for your experiment!
 	
-	public static bool isSyncbox = false;
+	public static bool isSyncbox = true;
 	public static bool isSystem2 = false;
 	
 	//REPLAY
