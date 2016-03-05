@@ -19,7 +19,7 @@ public class TrialLogTrack : LogTrack {
 	public void LogTrialInfo(int trialNumber, Trial trial){
 		if (ExperimentSettings.isLogging) {
 			LogTrialNum (trialNumber);
-			LogTrialTrajectory(trial.myTrajectory.startLoc.name, trial.myTrajectory.endLoc.name);
+			LogTrialDesiredLocation(trial.desiredItemLocation.name);
 		}
 	}
 
@@ -28,8 +28,8 @@ public class TrialLogTrack : LogTrack {
 		subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount(), "Trial Info" + separator + "NUM_TRIALS" + separator + trialNumber);
 	}
 	
-	void LogTrialTrajectory(string startLocation, string endLocation){
-		subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount(), "Trial Info" + separator + "TRIAL_TRAJECTORY_START" + separator + startLocation + separator + "TRIAL_TRAJECTORY_END" + separator + endLocation);
+	void LogTrialDesiredLocation(string desiredLocation){
+		subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount(), "Trial Info" + separator + "TRIAL_DESIRED_ITEM_LOCATION" + separator + desiredLocation);
 	}
 
 	void LogTrialType(bool is3DFirst){

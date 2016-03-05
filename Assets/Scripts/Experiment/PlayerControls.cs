@@ -9,8 +9,7 @@ public class PlayerControls : MonoBehaviour{
 	public bool ShouldLockControls = false;
 
 	public Transform TiltableTransform;
-	public Transform startPositionTransform1;
-	public Transform startPositionTransform2;
+	public Transform startTransform;
 
 	float RotationSpeed = 60.0f;
 	
@@ -26,6 +25,12 @@ public class PlayerControls : MonoBehaviour{
 		else{
 			GetComponent<Collider>().enabled = true;
 		}
+	}
+
+	
+	public void GoToStartPosition(){
+		transform.position = startTransform.position;
+		transform.rotation = startTransform.rotation;
 	}
 	
 	// Update is called once per frame

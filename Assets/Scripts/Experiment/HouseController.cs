@@ -4,10 +4,73 @@ using System.Collections.Generic;
 
 public class HouseController : MonoBehaviour {
 
+	public TextAsset LocationIDFile;
+	public TextAsset LocationOrderFile;
+
+	public List<ItemLocation> locationOrder;
+
 	public Transform[] RoomLocators;
-	public List<ItemLocation> ItemLocations { get { return GetItemLocations(); } }
+
+	public List<ItemLocation> ItemLocations { get { return GetItemLocations(); } } //should typically use this one -- does a null check for itemLocations, and fills in list if necessary.
 	List<ItemLocation> itemLocations;
-	List<ItemLocation> itemLocationsLeftToChoose;
+
+
+
+	void Awake(){
+		ProcessLocationIDs ();
+		InitLocationOrder ();
+	}
+
+	void ProcessLocationIDs(){
+		string[] lines = LocationIDFile.ToString().Split('\n');
+		foreach (string line in lines) {
+			if(line != ""){
+				string[] columns = line.Split('\t');
+
+				int ID = int.Parse(columns[0]);
+				string locName = columns[1];
+
+				ItemLocation currLoc = GetItemByName(locName);
+				if(currLoc != null){
+					currLoc.SetID(ID);
+				}
+			}
+		}
+	}
+
+	void InitLocationOrder(){
+		locationOrder = new List<ItemLocation> ();
+
+		string[] lines = LocationOrderFile.ToString().Split('\n');
+		foreach (string line in lines) {
+			if(line != ""){
+				int locID = int.Parse(line);
+				
+				ItemLocation currLoc = GetItemByID(locID);
+				if(currLoc != null){
+					locationOrder.Add(currLoc);
+				}
+			}
+		}
+	}
+
+	ItemLocation GetItemByName(string name){
+		for(int i = 0; i < ItemLocations.Count; i++){
+			if(ItemLocations[i].name == name){
+				return ItemLocations[i];
+			}
+		}
+		return null;
+	}
+
+	ItemLocation GetItemByID(int ID){
+		for(int i = 0; i < ItemLocations.Count; i++){
+			if(ItemLocations[i].GetID() == ID){
+				return ItemLocations[i];
+			}
+		}
+		return null;
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -33,19 +96,16 @@ public class HouseController : MonoBehaviour {
 		}
 	}
 
-	public ItemLocation ChooseItem(){
-		if(itemLocationsLeftToChoose == null){
-			itemLocationsLeftToChoose = GetItemLocations();
+	int nextItemIndex = 1;
+	public ItemLocation ChooseNextItem(){
+		if (nextItemIndex < ItemLocations.Count) {
+			nextItemIndex++;
+			return ItemLocations [nextItemIndex - 1];
 		}
-
-		if(itemLocationsLeftToChoose.Count <= 0){
-			itemLocationsLeftToChoose = GetItemLocations();
+		else{
+			Debug.Log("No more item locations!");
+			return null;
 		}
-		int randomIndex = Random.Range(0, itemLocationsLeftToChoose.Count);
-		ItemLocation chosenItem = itemLocationsLeftToChoose[randomIndex];
-		itemLocationsLeftToChoose.RemoveAt(randomIndex);
-		return chosenItem;
-		
 	}
 
 }

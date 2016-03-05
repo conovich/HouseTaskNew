@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ItemLocation : MonoBehaviour {
 
+	int ID;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -15,5 +17,13 @@ public class ItemLocation : MonoBehaviour {
 
 	public Transform GetRoom(){
 		return transform.parent;
+	}
+
+	public void SetID(int newID){
+		ID = newID;
+	}
+
+	public int GetID(){
+		return ID;
 	}
 }

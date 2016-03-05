@@ -7,6 +7,8 @@ public class MapCursorControls : MonoBehaviour {
 
 	public bool ShouldLockControls = false;
 
+	public GameObject rightDirObject;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -16,15 +18,20 @@ public class MapCursorControls : MonoBehaviour {
 	void Update () {
 		if (exp.currentState == Experiment.ExperimentState.inExperiment) {
 			if(!ShouldLockControls){
-				GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation; // TODO: on collision, don't allow a change in angular velocity?
+				GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX; // TODO: on collision, don't allow a change in angular velocity?
 				
 				//sets velocities
 				GetInput ();
 			}
 			else{
-				GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+				GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 			}
 		}
+	}
+
+	void CollisionEnter(Collision collision){
+
+		Debug.Log (collision.gameObject.name);
 	}
 
 	void GetInput(){
@@ -33,22 +40,32 @@ public class MapCursorControls : MonoBehaviour {
 		//Debug.Log("vert input: " + verticalAxisInput);
 		if ( Mathf.Abs(verticalAxisInput) > 0.0f) { //EPSILON should be accounted for in Input Settings "dead zone" parameter
 			
-			GetComponent<Rigidbody2D>().velocity = transform.up*verticalAxisInput*Config.cursorDriveSpeed; //since we are setting velocity based on input, no need for time.delta time component
+			GetComponent<Rigidbody>().velocity = transform.up*verticalAxisInput*Config.cursorDriveSpeed; //since we are setting velocity based on input, no need for time.delta time component
 			
 		}
 		else{
-			GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+			GetComponent<Rigidbody>().velocity = Vector2.zero;
 		}
 		
 		//HORIZONTAL
 		float horizontalAxisInput = Input.GetAxis ("Horizontal");
 		if (Mathf.Abs (horizontalAxisInput) > 0.0f) { //EPSILON should be accounted for in Input Settings "dead zone" parameter
-			GetComponent<Rigidbody2D>().velocity += ((Vector2)transform.right*horizontalAxisInput*Config.cursorDriveSpeed);
+			Vector3 rightDir = rightDirObject.transform.position - transform.position;
+			rightDir = rightDir.normalized;
+			GetComponent<Rigidbody>().velocity += rightDir*horizontalAxisInput*Config.cursorDriveSpeed;
 		}
 
 		else if(Mathf.Abs(verticalAxisInput) <= 0.0f && Mathf.Abs(horizontalAxisInput) <= 0.0f){
-			GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+			GetComponent<Rigidbody>().velocity = Vector2.zero;
+			Debug.Log("SETTING TO ZERO");
 		}
+
+		Rigidbody r = GetComponent<Rigidbody> ();
+
+		Debug.Log ("VERT AXIS: " + verticalAxisInput + " " + GetComponent<Rigidbody>().velocity);
+
+		Debug.Log ("HORIZ AXIS: " + horizontalAxisInput + " " + GetComponent<Rigidbody>().velocity);
+
 
 	}
 }

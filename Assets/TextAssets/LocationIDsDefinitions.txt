@@ -1,0 +1,22 @@
+11	gardening tools in the living room
+12	painting in the living room
+13	front door
+14	fireplace
+15	coat rack in the living room
+21	kitchen clock
+22	refrigerator
+23	kitchen stove
+24	kitchen island
+25	flowers on the dining room table
+31	chair in parent’s bedroom
+32	side table by parent’s bed
+33	parent’s closet
+34	desk in parent’s bedroom
+35	parent’s dresser
+41	bathtub
+42	toilet
+43	bathroom sink
+51	kid’s toys
+52	kid’s table
+53	kid’s dresser
+54	kid’s bunk-bed

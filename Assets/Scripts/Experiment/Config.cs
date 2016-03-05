@@ -11,7 +11,7 @@ public class Config : MonoBehaviour {
 	public static Version BuildVersion = Version.ExpName; //TODO: change this for your experiment!
 	public static string VersionNumber = "2.03"; //TODO: change this for your experiment!
 	
-	public static bool isSyncbox = true;
+	public static bool isSyncbox = false;
 	public static bool isSystem2 = false;
 	
 	//REPLAY
@@ -23,9 +23,9 @@ public class Config : MonoBehaviour {
 
 
 	//LOCATOR COLLECTION VARIABLES
-	public static float totalLearningTime = 120.0f;
+	public static float totalLearningTime = 5.0f;
 	public static int learningLocatorScore = 50;
-	public static float learningTimeToPassUntilArrows = 5.0f;
+	public static float learningTimeToPassUntilArrows = 1.0f;
 
 
 	//stimulation variables
@@ -88,7 +88,7 @@ public class Config : MonoBehaviour {
 
 	//drive variables
 	public static float driveSpeed = 5.0f;
-	public static float cursorDriveSpeed = 60.0f;
+	public static float cursorDriveSpeed = 0.4f;
 
 	//object buffer variables
 

@@ -53,15 +53,14 @@ public class TrialController : MonoBehaviour {
 
 	}
 
-	Trial PickRandomTrial(){
+	Trial GetNextTrial(){
 		Debug.Log("Picking a trial.");
 
-		if(TrialList.Count > 0){
-			int randomTrialIndex = Random.Range (0, TrialList.Count);
-			Trial randomTrial = TrialList [randomTrialIndex];
+		if (TrialList.Count > 0) {
+			Trial nextTrial = TrialList[0];
 
-			TrialList.RemoveAt (randomTrialIndex);
-			return randomTrial;
+			TrialList.RemoveAt (0);
+			return nextTrial;
 		}
 		else{
 			Debug.Log("No more trials left!");
@@ -153,7 +152,9 @@ public class TrialController : MonoBehaviour {
 			string overheadIntroInstruction = "You will now be asked to go to various locations in the apartment to pick up things. You will also be asked to show your path on a map." +
 				"\n\n Press (X) to begin.";
 			yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (overheadIntroInstruction, true, true, false, Config.minDefaultInstructionTime));
-			
+
+			exp.player.controls.GoToStartPosition();
+
 			//run practice trial(s)
 			if(Config.doPracticeTrial){
 				isPracticeTrial = true;
@@ -172,7 +173,7 @@ public class TrialController : MonoBehaviour {
 			//RUN THE REST OF THE TRIALS
 			for(int i = 0; i < Config.numTestTrials; i++){
 				Debug.Log("NUM TRIALS LEFT: " + TrialList.Count);
-				Trial nextTrial = PickRandomTrial();
+				Trial nextTrial = GetNextTrial();
 				yield return StartCoroutine (RunTrial ( nextTrial ));
 
 				totalTrialCount += 1;
@@ -199,6 +200,9 @@ public class TrialController : MonoBehaviour {
 			}
 			yield return 0;
 		}
+
+		exp.player.shouldUseArrows = false;
+		exp.player.TurnOnOverheadArrow(false, null);
 
 		//tell locator controller to delete the rest of the coins
 		exp.learningLocatorController.DeactivateAllLocators();
@@ -285,9 +289,6 @@ public class TrialController : MonoBehaviour {
 		yield return StartCoroutine (exp.player.WaitForItemCollision (currentTrial.desiredItemLocation));
 		exp.instructionsController.TurnOffInstructions();
 		
-		
-		//lock player movement
-		exp.player.controls.ShouldLockControls = true;
 		trialLogger.LogTrialNavigation (false);
 
 		trialLogger.LogFirstPersonTrial(false);
@@ -306,6 +307,9 @@ public class TrialController : MonoBehaviour {
 		else{
 			goToLocationInstruction = "Show us the path you took to the " + currentTrial.desiredItemLocation.name + ", and press (X) when finished.";
 		}
+
+		//unlock avatar controls
+		exp.player.controls.ShouldLockControls = true;
 
 		exp.overheadMap.TurnOn(true);
 		trialLogger.LogTrialNavigation (true);
