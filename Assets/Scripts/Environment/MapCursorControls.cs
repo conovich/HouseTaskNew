@@ -7,7 +7,10 @@ public class MapCursorControls : MonoBehaviour {
 
 	public bool ShouldLockControls = false;
 
-	public GameObject rightDirObject;
+	public Transform rightBound;
+	public Transform leftBound;
+	public Transform upBound;
+	public Transform downBound;
 
 	// Use this for initialization
 	void Start () {
@@ -18,13 +21,13 @@ public class MapCursorControls : MonoBehaviour {
 	void Update () {
 		if (exp.currentState == Experiment.ExperimentState.inExperiment) {
 			if(!ShouldLockControls){
-				GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX; // TODO: on collision, don't allow a change in angular velocity?
+				//GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX; // TODO: on collision, don't allow a change in angular velocity?
 				
 				//sets velocities
 				GetInput ();
 			}
 			else{
-				GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+				//GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 			}
 		}
 	}
@@ -35,37 +38,94 @@ public class MapCursorControls : MonoBehaviour {
 	}
 
 	void GetInput(){
+		//float upMoveAmount = 0.0f;
+		//float rightMoveAmount = 0.0f;
+
+		Vector3 upVec = Vector3.zero;
+		Vector3 rightVec = Vector3.zero;
+
 		//VERTICAL
 		float verticalAxisInput = Input.GetAxis ("Vertical");
-		//Debug.Log("vert input: " + verticalAxisInput);
+
 		if ( Mathf.Abs(verticalAxisInput) > 0.0f) { //EPSILON should be accounted for in Input Settings "dead zone" parameter
-			
-			GetComponent<Rigidbody>().velocity = transform.up*verticalAxisInput*Config.cursorDriveSpeed; //since we are setting velocity based on input, no need for time.delta time component
-			
+			Vector3 dir = upBound.position - downBound.position;
+			upVec = verticalAxisInput * dir.normalized * Config.cursorDriveSpeed;
 		}
-		else{
-			GetComponent<Rigidbody>().velocity = Vector2.zero;
-		}
-		
+
 		//HORIZONTAL
 		float horizontalAxisInput = Input.GetAxis ("Horizontal");
 		if (Mathf.Abs (horizontalAxisInput) > 0.0f) { //EPSILON should be accounted for in Input Settings "dead zone" parameter
-			Vector3 rightDir = rightDirObject.transform.position - transform.position;
-			rightDir = rightDir.normalized;
-			GetComponent<Rigidbody>().velocity += rightDir*horizontalAxisInput*Config.cursorDriveSpeed;
+			Vector3 dir = rightBound.position - leftBound.position;
+			rightVec = horizontalAxisInput * dir.normalized * Config.cursorDriveSpeed;
 		}
 
-		else if(Mathf.Abs(verticalAxisInput) <= 0.0f && Mathf.Abs(horizontalAxisInput) <= 0.0f){
-			GetComponent<Rigidbody>().velocity = Vector2.zero;
-			Debug.Log("SETTING TO ZERO");
+		Move (upVec, rightVec);
+	}
+
+	void Move(Vector3 upVec, Vector3 rightVec){
+		RectTransform rt = GetComponent<RectTransform>();
+
+		rt.position += upVec;
+		if(transform.position.y > upBound.position.y){
+			rt.position = new Vector3(rt.position.x, upBound.position.y, rt.position.z);
+		}
+		else if (transform.position.y < downBound.position.y){
+			rt.position = new Vector3(rt.position.x, downBound.position.y, rt.position.z);
 		}
 
-		Rigidbody r = GetComponent<Rigidbody> ();
+		rt.position += rightVec;
+		//if transform.position is between the two other points -- in x & z, on a line -- we're good
+		if(!IsPointBetween(transform.position, rightBound.position, leftBound.position)){
+			float leftDist = (transform.position - leftBound.position).magnitude;
+			float rightDist = (transform.position - rightBound.position).magnitude;
 
-		Debug.Log ("VERT AXIS: " + verticalAxisInput + " " + GetComponent<Rigidbody>().velocity);
+			if(leftDist > rightDist){
+				rt.position = new Vector3(rightBound.position.x, rt.position.y, rightBound.position.z);
+			}
+			else{
+				rt.position = new Vector3(leftBound.position.x, rt.position.y, leftBound.position.z);
+			}
+		}
 
-		Debug.Log ("HORIZ AXIS: " + horizontalAxisInput + " " + GetComponent<Rigidbody>().velocity);
+		/*if(transform.position.x > rightBound.position.x){
+			rt.position = new Vector3(rightBound.position.x, rt.position.y, rt.position.z);
+		}
+		else if (transform.position.x < leftBound.position.x){
+			rt.position = new Vector3(leftBound.position.x, rt.position.y, rt.position.z);
+		}*/
 
+	}
+
+	bool IsPointBetween(Vector3 point, Vector3 pointA, Vector3 pointB){
+		float epsilon = 0.01f;
+
+		float crossProd = (point.z - pointA.z) * (pointB.x - pointA.x) - (point.x - pointA.x) * (pointB.z - pointA.z);
+		if(Mathf.Abs(crossProd) > epsilon){
+			return false;
+		}
+
+		float dotProd = (point.x - pointA.x) * (pointB.x - pointA.x) + (point.z - pointA.z)*(pointB.z - pointA.z);
+		if(dotProd < 0){
+			return false;
+		}
+
+		float squaredlengthba = (pointB.x - pointA.x)*(pointB.x - pointA.x) + (pointB.z - pointA.z)*(pointB.z - pointA.z);
+		if(dotProd > squaredlengthba){
+			return false;
+		}
+
+			/*
+			 * check if c is bw a & b
+			crossproduct = (point.y - a.y) * (b.x - a.x) - (point.x - a.x) * (b.y - a.y)
+				if abs(crossproduct) > epsilon : return False   # (or != 0 if using integers)
+				
+				dotproduct = (point.x - a.x) * (b.x - a.x) + (point.y - a.y)*(b.y - a.y)
+				if dotproduct < 0 : return False
+				
+				squaredlengthba = (b.x - a.x)*(b.x - a.x) + (b.y - a.y)*(b.y - a.y)
+				if dotproduct > squaredlengthba: return False*/
+
+		return true;
 
 	}
 }
