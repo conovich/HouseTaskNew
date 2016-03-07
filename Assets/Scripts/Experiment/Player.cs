@@ -66,6 +66,10 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	public void LockControls(bool shouldLock){
+		controls.ShouldLockControls = shouldLock; //if we should lock controls, we should NOT enable them.
+	}
+
 	public void TurnOnVisuals(bool isVisible){
 		visuals.SetActive (isVisible);
 	}

@@ -12,6 +12,9 @@ public class TrialController : MonoBehaviour {
 	//paused?!
 	public static bool isPaused = false;
 
+	//2D vs 3D trials
+	public TextAsset TrialTypeFile;
+
 	//UI
 	public CanvasGroup PauseUI;
 	public CanvasGroup ConnectionUI;
@@ -39,11 +42,7 @@ public class TrialController : MonoBehaviour {
 		TrialList = new List<Trial> ();
 
 		for(int i = 0; i < Config.numTestTrials; i++){
-			bool is3Dfirst = true;
-			if(i % 2 == 0){
-				is3Dfirst = false;
-			}
-			Trial trial = new Trial(is3Dfirst);
+			Trial trial = new Trial(true); //will set the actual trial types later in ProcessTrialTypes
 			TrialList.Add(trial);
 		}
 
@@ -51,6 +50,37 @@ public class TrialController : MonoBehaviour {
 			practiceTrial = new Trial(true);	//2 special objects for practice trial
 		}
 
+		ProcessTrialTypes ();
+
+	}
+
+	void ProcessTrialTypes(){
+		string[] lines = TrialTypeFile.ToString().Split('\n');
+
+		for (int i = 0; i < TrialList.Count; i++) {
+			if(i < lines.Length){
+				string line = lines[i];
+				if(line != ""){
+					string[] typesPerSession = line.Split('\t');
+					int sessionIndex = Experiment.sessionID;
+					if(Experiment.sessionID >= typesPerSession.Length){
+						sessionIndex = typesPerSession.Length - 1;
+						Debug.Log("TRIAL TYPES: Not enough sessions to choose from!");
+					}
+
+					int currSessionType = int.Parse(typesPerSession[sessionIndex]);
+					if(currSessionType == 1){
+						TrialList[i].is3DFirst = true;
+					}
+					else if(currSessionType == 2){
+						TrialList[i].is3DFirst = false;
+					}
+				}
+			}
+			else{
+				Debug.Log("Not enough lines in this file!");
+			}
+		}
 	}
 
 	Trial GetNextTrial(){
@@ -104,7 +134,7 @@ public class TrialController : MonoBehaviour {
 		else {
 			Time.timeScale = 1.0f;
 			//exp.player.controls.Pause(false);
-			//exp.player.controls.ShouldLockControls = false;
+			//exp.player.LockControls(false);
 			PauseUI.alpha = 0.0f;
 		}
 	}
@@ -115,7 +145,7 @@ public class TrialController : MonoBehaviour {
 		if (!ExperimentSettings.isReplay) {
 			exp.fullInstructionsPanel.TurnOffInstructions();
 
-			exp.player.controls.ShouldLockControls = true;
+			exp.player.LockControls(true);
 
 			if(ExperimentSettings.isSystem2 || ExperimentSettings.isSyncbox){
 				yield return StartCoroutine( WaitForEEGHardwareConnection() );
@@ -131,14 +161,14 @@ public class TrialController : MonoBehaviour {
 
 			//let player explore until the button is pressed again
 			trialLogger.LogLearningExplorationEvent(true);
-			exp.player.controls.ShouldLockControls = false;
+			exp.player.LockControls(false);
 			yield return StartCoroutine(WaitForLearningPhase());
 			trialLogger.LogLearningExplorationEvent(false);
 			//yield return StartCoroutine (exp.WaitForActionButton ());
 
-			exp.player.controls.ShouldLockControls = true;
+			exp.player.LockControls(true);
 			yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Great Job! Time to move on to the real task.", true, true, false, Config.minInitialInstructionsTime ));
-			exp.player.controls.ShouldLockControls = false;
+			exp.player.LockControls(false);
 
 			//get the number of blocks so far -- floor half the number of trials recorded
 			int totalTrialCount = ExperimentSettings.currentSubject.trials;
@@ -274,11 +304,15 @@ public class TrialController : MonoBehaviour {
 			goToLocationInstruction = "Follow the same path to the " + currentTrial.desiredItemLocation.name + " that you took on the overhead map.";
 		}
 
+		//keep player controls locked until they press x
+		exp.player.LockControls(true);
+		yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction ("To begin the trial, press (X).", false, true, false, 0.0f));
+		
 		//START NAVIGATION
 		trialLogger.LogTrialNavigation (true);
 		
 		//unlock avatar controls
-		exp.player.controls.ShouldLockControls = false;
+		exp.player.LockControls(false);
 		
 		//tell player where to go next
 		exp.instructionsController.SetInstructionsTransparentOverlay();
@@ -308,14 +342,19 @@ public class TrialController : MonoBehaviour {
 			goToLocationInstruction = "Show us the path you took to the " + currentTrial.desiredItemLocation.name + ", and press (X) when finished.";
 		}
 
-		//unlock avatar controls
-		exp.player.controls.ShouldLockControls = true;
+		//lock avatar controls
+		exp.player.LockControls(true);
 
 		exp.overheadMap.TurnOn(true);
 		trialLogger.LogTrialNavigation (true);
-		exp.overheadMap.LockCursor(false);
-		if(!isStart){
-			yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Place the cursor where you started, and then press (X).", false, true, false, 0.0f));
+
+		if (!isStart) {
+			exp.overheadMap.LockCursor(false);
+			yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction ("Place the cursor where you started, and then press (X).", false, true, false, 0.0f));
+		} else {
+			exp.overheadMap.LockCursor(true);
+			yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction ("To begin the trial, press (X).", false, true, false, 0.0f));
+			exp.overheadMap.LockCursor(false);
 		}
 		exp.overheadMap.mapCursor.StartPath();
 		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction(goToLocationInstruction, false, true, false, 0.0f));
