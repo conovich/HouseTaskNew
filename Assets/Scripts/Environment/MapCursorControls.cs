@@ -12,6 +12,8 @@ public class MapCursorControls : MonoBehaviour {
 	public Transform upBound;
 	public Transform downBound;
 
+	public bool isMoving = false;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -60,6 +62,12 @@ public class MapCursorControls : MonoBehaviour {
 		}
 
 		Move (upVec, rightVec);
+
+		if (verticalAxisInput == 0 && horizontalAxisInput == 0) {
+			isMoving = false;
+		} else {
+			isMoving = true;
+		}
 	}
 
 	void Move(Vector3 upVec, Vector3 rightVec){

@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class MapCursor : MonoBehaviour {
 
 	public MapCursorControls controls;
-	public GameObject PathPiece;
-	float timeUntilNextPathPiece = 0.5f;
+	public GameObject PathPiecePrefab;
+	float timeUntilNextPathPiece = 0.2f;
 
 	List<GameObject> pathPieces;
 
@@ -22,16 +22,18 @@ public class MapCursor : MonoBehaviour {
 
 	bool shouldMakePath = false;
 	public void StartPath(){
-		//shouldMakePath = true;
-		//StartCoroutine(PlacePathComponents());
+		shouldMakePath = true;
+		StartCoroutine(PlacePathComponents());
 	}
 
 	IEnumerator PlacePathComponents(){
 		while (shouldMakePath){
-			if(GetComponent<Rigidbody2D>().velocity.magnitude != 0){
-				GameObject newPathPiece = Instantiate(PathPiece, transform.position, Quaternion.identity) as GameObject;
+
+			if(controls.isMoving){
+				GameObject newPathPiece = Instantiate(PathPiecePrefab, transform.position, transform.rotation) as GameObject;
 				pathPieces.Add(newPathPiece);
 				newPathPiece.transform.SetParent(transform.parent);
+				newPathPiece.transform.localScale = PathPiecePrefab.transform.localScale;
 
 				yield return new WaitForSeconds(timeUntilNextPathPiece);
 			}
