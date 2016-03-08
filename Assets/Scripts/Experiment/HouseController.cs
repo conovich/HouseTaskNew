@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 public class HouseController : MonoBehaviour {
 
@@ -29,6 +30,8 @@ public class HouseController : MonoBehaviour {
 
 				int ID = int.Parse(columns[0]);
 				string locName = columns[1];
+
+				locName = locName.Replace("\r", "");
 
 				ItemLocation currLoc = GetItemByName(locName);
 				if(currLoc != null){
