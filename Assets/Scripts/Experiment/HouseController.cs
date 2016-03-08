@@ -44,7 +44,16 @@ public class HouseController : MonoBehaviour {
 		string[] lines = LocationOrderFile.ToString().Split('\n');
 		foreach (string line in lines) {
 			if(line != ""){
-				int locID = int.Parse(line);
+
+				string[] locIDsPerSession = line.Split('\t');
+
+				int sessionIndex = Experiment.sessionID;
+				if(Experiment.sessionID >= locIDsPerSession.Length){
+					sessionIndex = locIDsPerSession.Length - 1;
+					Debug.Log("TRIAL TYPES: Not enough sessions to choose from!");
+				}
+
+				int locID = int.Parse(locIDsPerSession[sessionIndex]);
 				
 				ItemLocation currLoc = GetItemByID(locID);
 				if(currLoc != null){
@@ -98,9 +107,9 @@ public class HouseController : MonoBehaviour {
 
 	int nextItemIndex = 1;
 	public ItemLocation ChooseNextItem(){
-		if (nextItemIndex < ItemLocations.Count) {
+		if (nextItemIndex < locationOrder.Count) {
 			nextItemIndex++;
-			return ItemLocations [nextItemIndex - 1];
+			return locationOrder [nextItemIndex - 1];
 		}
 		else{
 			Debug.Log("No more item locations!");
