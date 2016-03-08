@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 public class HouseController : MonoBehaviour {
 
 	public TextAsset LocationIDFile;
 	public TextAsset LocationOrderFile;
 
-	public List<ItemLocation> locationOrder;
+	public List<ItemLocation> trajectoriesOrder;
 
 	public Transform[] RoomLocators;
 
@@ -19,7 +20,7 @@ public class HouseController : MonoBehaviour {
 
 	void Awake(){
 		ProcessLocationIDs ();
-		InitLocationOrder ();
+		InitTrajectoriesOrder ();
 	}
 
 	void ProcessLocationIDs(){
@@ -41,10 +42,15 @@ public class HouseController : MonoBehaviour {
 		}
 	}
 
-	void InitLocationOrder(){
-		locationOrder = new List<ItemLocation> ();
+	void InitTrajectoriesOrder(){
+		trajectoriesOrder = new List<ItemLocation> ();
 
 		string[] lines = LocationOrderFile.ToString().Split('\n');
+
+		if (ExperimentSettings.trajectoriesPath != "") {
+			lines = File.ReadAllLines(ExperimentSettings.trajectoriesPath);
+		}
+
 		foreach (string line in lines) {
 			if(line != ""){
 
@@ -60,7 +66,7 @@ public class HouseController : MonoBehaviour {
 				
 				ItemLocation currLoc = GetItemByID(locID);
 				if(currLoc != null){
-					locationOrder.Add(currLoc);
+					trajectoriesOrder.Add(currLoc);
 				}
 			}
 		}
@@ -110,9 +116,9 @@ public class HouseController : MonoBehaviour {
 
 	int nextItemIndex = 1;
 	public ItemLocation ChooseNextItem(){
-		if (nextItemIndex < locationOrder.Count) {
+		if (nextItemIndex < trajectoriesOrder.Count) {
 			nextItemIndex++;
-			return locationOrder [nextItemIndex - 1];
+			return trajectoriesOrder [nextItemIndex - 1];
 		}
 		else{
 			Debug.Log("No more item locations!");

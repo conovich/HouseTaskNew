@@ -49,8 +49,13 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 	public GameObject nonPilotOptions;
 	public bool isPilot { get { return GetIsPilot (); } }
 
+	//GET TRAJECTORIES PATH
+	public static string trajectoriesPath = ""; //SET IN RESETDEFAULTPATHS();
+	public Text trajectoriesPathDisplay;
+	public InputField trajectoriesPathInputField;
 
-	public static string defaultLoggingPath = ""; //SET IN RESETDEFAULTLOGGINGPATH();
+	//LOGGING PATH
+	public static string defaultLoggingPath = ""; //SET IN RESETDEFAULTPATHS();
 	string ExpVersionFolder1 = "/EXP/"; //TODO: change for your experiment!
 	public Text defaultLoggingPathDisplay;
 	public InputField loggingPathInputField;
@@ -80,12 +85,12 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 
 
 
-	void ResetDefaultLoggingPath(){
+	void ResetDefaultLoggingPaths(){
 		defaultLoggingPath = "/Users/" + System.Environment.UserName + "/RAM_2.0/data";
 	}
-	
+
 	void InitLoggingPath(){
-		ResetDefaultLoggingPath ();
+		ResetDefaultLoggingPaths ();
 		
 		if(Directory.Exists(defaultLoggingPath)){
 			if (Config.BuildVersion == Config.Version.ExpName) {
@@ -146,6 +151,22 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 			return false;
 		}
 		return true;
+	}
+	
+	public void ChangeLoggingPath(){
+		if (Directory.Exists (loggingPathInputField.text)) {
+			defaultLoggingPath = loggingPathInputField.text;
+		}
+		
+		defaultLoggingPathDisplay.text = defaultLoggingPath;
+	}
+
+	public void ChangeTrajectoriesPath(){
+		if (File.Exists(trajectoriesPathInputField.text)) {
+			trajectoriesPath = trajectoriesPathInputField.text;
+		}
+		
+		trajectoriesPathDisplay.text = trajectoriesPath;
 	}
 
 	public void SetReplayTrue(){
