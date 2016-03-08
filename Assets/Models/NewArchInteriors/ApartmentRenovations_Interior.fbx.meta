@@ -3,7 +3,7 @@ guid: bffebddcc6f004a1f942c6cd3704ab9c
 timeCreated: 1456100287
 licenseType: Free
 ModelImporter:
-  serializedVersion: 18
+  serializedVersion: 19
   fileIDToRecycleName:
     100000: AI_027_002_additives_obj01
     100002: AI_027_002_additives_obj03
@@ -1338,6 +1338,8 @@ ModelImporter:
     2300764: AI_027_002_table_obj03
     2300766: AI_027_002_table_obj04
     2300768: AI_027_002_trash wicker_obj_01
+    2300770: AI_027_002_furniture_obj_15 1
+    2300772: AI_027_002_furniture_obj_18
     3300000: AI_027_002_additives_obj01
     3300002: AI_027_002_additives_obj03
     3300004: AI_027_002_additives_obj04
@@ -1723,6 +1725,8 @@ ModelImporter:
     3300764: AI_027_002_table_obj03
     3300766: AI_027_002_table_obj04
     3300768: AI_027_002_trash wicker_obj_01
+    3300770: AI_027_002_furniture_obj_15 1
+    3300772: AI_027_002_furniture_obj_18
     4300000: AI_027_002_floor_lamps_obj12
     4300002: AI_027_002_floor_lamps_obj10
     4300004: AI_027_002_floor_lamps_obj09
@@ -2117,6 +2121,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
+    resampleRotations: 1
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
@@ -2124,9 +2129,9 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     clipAnimations: []
@@ -2150,24 +2155,25 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
     normalImportMode: 0
-    tangentImportMode: 1
+    tangentImportMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
     skeleton: []
-    armTwist: .5
-    foreArmTwist: .5
-    upperLegTwist: .5
-    legTwist: .5
-    armStretch: .0500000007
-    legStretch: .0500000007
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
+  humanoidOversampling: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
