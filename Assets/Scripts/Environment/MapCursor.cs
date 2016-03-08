@@ -22,8 +22,8 @@ public class MapCursor : MonoBehaviour {
 
 	bool shouldMakePath = false;
 	public void StartPath(){
-		shouldMakePath = true;
-		StartCoroutine(PlacePathComponents());
+		//shouldMakePath = true;
+		//StartCoroutine(PlacePathComponents());
 	}
 
 	IEnumerator PlacePathComponents(){
