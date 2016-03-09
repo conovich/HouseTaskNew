@@ -22,10 +22,10 @@ public class Config : MonoBehaviour {
 	public static bool isSoundtrack = false; //WON'T PLAY IF ISJUICE IS FALSE.
 
 
-	//LOCATOR COLLECTION VARIABLES
-	public static float totalLearningTime = 60.0f;
-	public static int learningLocatorScore = 50;
-	public static float learningTimeToPassUntilArrows = 10.0f;
+    //LOCATOR COLLECTION VARIABLES
+    public static float totalLearningTime = 240.0f;
+	public static int learningLocatorScore = 10;
+	public static float learningTimeToPassUntilArrows = 180.0f;
 
 
 	//stimulation variables
@@ -34,7 +34,7 @@ public class Config : MonoBehaviour {
 	public static float stimDuration;	//TODO
 	public static bool shouldDoBreak;	//TODO
 
-	public static int numTestTrials = 8;
+	public static int numTestTrials = 150;
 	
 	//practice settings
 	public static int numTrialsPract = 1;
@@ -84,7 +84,7 @@ public class Config : MonoBehaviour {
 	public static float turnAngleMult = 0.07f;
 
 	//drive variables
-	public static float driveSpeed = 5.0f;
+	public static float driveSpeed = 3.5f;
 	public static float cursorDriveSpeed = 0.001f;
 
 	//object buffer variables

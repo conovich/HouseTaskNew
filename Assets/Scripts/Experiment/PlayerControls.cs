@@ -11,7 +11,7 @@ public class PlayerControls : MonoBehaviour{
 	public Transform TiltableTransform;
 	public Transform startTransform;
 
-	float RotationSpeed = 60.0f;
+	float RotationSpeed = 30.0f;
 	
 	//float maxTimeToMove = 3.75f; //seconds to move across the furthest field distance
 	//float minTimeToMove = 1.5f; //seconds to move across the closest field distance
