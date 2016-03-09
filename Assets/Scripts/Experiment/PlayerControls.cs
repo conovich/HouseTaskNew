@@ -140,6 +140,10 @@ public class PlayerControls : MonoBehaviour{
 		}
 	}
 
+	public void Rotate(float degrees){
+		transform.RotateAround(transform.position, Vector3.up, degrees);
+	}
+
 
 	public IEnumerator SmoothMoveTo(Vector3 targetPosition, Quaternion targetRotation, float timeToTravel){
 

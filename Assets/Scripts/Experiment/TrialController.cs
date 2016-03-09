@@ -303,6 +303,8 @@ public class TrialController : MonoBehaviour {
 		}
 		else{
 			goToLocationInstruction = "Follow the same path to the " + currentTrial.desiredItemLocation.name + " that you took on the overhead map.";
+		
+			exp.player.controls.Rotate(180.0f);
 		}
 			
 		//START NAVIGATION
