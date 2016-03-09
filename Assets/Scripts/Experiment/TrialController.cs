@@ -21,6 +21,9 @@ public class TrialController : MonoBehaviour {
 
 	public SimpleTimer LearningTimer;
 
+	//public CanvasGroup initialInstructions;
+	//public CanvasGroup trialPhaseInstructions;
+
 	TrialLogTrack trialLogger;
 
 	bool isPracticeTrial = false;
@@ -157,7 +160,6 @@ public class TrialController : MonoBehaviour {
 			//show instructions for exploring, wait for the action button
 			trialLogger.LogInstructionEvent();
 			yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minInitialInstructionsTime));
-			yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction (Config.initialInstructions2, true, true, false, Config.minInitialInstructionsTime));
 
 			//let player explore until the button is pressed again
 			trialLogger.LogLearningExplorationEvent(true);
@@ -167,8 +169,6 @@ public class TrialController : MonoBehaviour {
 			//yield return StartCoroutine (exp.WaitForActionButton ());
 
 			exp.player.LockControls(true);
-			yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Great Job! Time to move on to the real task.", true, true, false, Config.minInitialInstructionsTime ));
-			exp.player.LockControls(false);
 
 			//get the number of blocks so far -- floor half the number of trials recorded
 			int totalTrialCount = ExperimentSettings.currentSubject.trials;
@@ -179,9 +179,8 @@ public class TrialController : MonoBehaviour {
 				}
 			}
 
-			string overheadIntroInstruction = "You will now be asked to go to various locations in the apartment to pick up things. You will also be asked to show your path on a map." +
-				"\n\n Press (X) to begin.";
-			yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (overheadIntroInstruction, true, true, false, Config.minDefaultInstructionTime));
+
+			yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.overheadIntroInstruction, true, true, false, Config.minDefaultInstructionTime));
 
 			exp.player.controls.GoToStartPosition();
 
@@ -217,6 +216,8 @@ public class TrialController : MonoBehaviour {
 
 	IEnumerator WaitForLearningPhase(){
 		Debug.Log("Waiting for learning phase!");
+
+		exp.player.controls.GoToStartPosition();
 
 		LearningTimer.SetTimerMaxTime(Config.totalLearningTime);
 		LearningTimer.StartTimer();
@@ -303,11 +304,7 @@ public class TrialController : MonoBehaviour {
 		else{
 			goToLocationInstruction = "Follow the same path to the " + currentTrial.desiredItemLocation.name + " that you took on the overhead map.";
 		}
-
-		//keep player controls locked until they press x
-		exp.player.LockControls(true);
-		yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction ("To begin the trial, press (X).", false, true, false, 0.0f));
-		
+			
 		//START NAVIGATION
 		trialLogger.LogTrialNavigation (true);
 		
@@ -336,10 +333,10 @@ public class TrialController : MonoBehaviour {
 
 		if(isStart){
 			//TODO: put the player cursor in the right start location!!
-			goToLocationInstruction = "Please go to the " + currentTrial.desiredItemLocation.name + ".";
+			goToLocationInstruction = "Please go to the " + currentTrial.desiredItemLocation.name + " and press (A) when finished.";
 		}
 		else{
-			goToLocationInstruction = "Show us the path you took to the " + currentTrial.desiredItemLocation.name + ", and press (X) when finished.";
+			goToLocationInstruction = "Retrace the path you just took to the " + currentTrial.desiredItemLocation.name + ". \n\nPress (A) when finished.";
 		}
 
 		//lock avatar controls
@@ -349,20 +346,32 @@ public class TrialController : MonoBehaviour {
 		trialLogger.LogTrialNavigation (true);
 
 		if (!isStart) {
-			exp.overheadMap.LockCursor(false);
-			yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction ("Place the cursor where you started, and then press (X).", false, true, false, 0.0f));
+			//exp.overheadMap.LockCursor(false);
+			//yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction ("Place the cursor where you started, and then press (X).", false, true, false, 0.0f));
 		} else {
-			exp.overheadMap.LockCursor(true);
-			yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction ("To begin the trial, press (X).", false, true, false, 0.0f));
-			exp.overheadMap.LockCursor(false);
+			//exp.overheadMap.LockCursor(true);
+			//yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction ("To begin the trial, press (X).", false, true, false, 0.0f));
+			//exp.overheadMap.LockCursor(false);
 		}
-		exp.overheadMap.mapCursor.StartPath();
-		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction(goToLocationInstruction, false, true, false, 0.0f));
-		exp.overheadMap.LockCursor (true);
+		//exp.overheadMap.mapCursor.StartPath();
+		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction(goToLocationInstruction, true, false, false, 3.0f));
+		//yield return new WaitForSeconds(1.5f);
+		exp.overheadMap.LockCursor(false);
+		while(!exp.overheadMap.mapCursor.controls.isMoving){ //wait for input 
+			yield return 0;
+		}
 
+		//once player starts moving cursor, turn off instructions
+		exp.instructionsController.SetInstructionsBlank();
+
+		//wait for button press to indicate travel is over
+		yield return StartCoroutine(exp.WaitForActionButton());
+
+		//lock cursor movement, log navigation over
+		exp.overheadMap.LockCursor (true);
 		trialLogger.LogTrialNavigation (false);
 
-		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Press (X) to continue to the next trial.", false, true, false, 0.0f));
+		//yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction("Press (X) to continue to the next trial.", false, true, false, 0.0f));
 		exp.overheadMap.TurnOn(false);
 
 		trialLogger.LogOverheadTrial(false);

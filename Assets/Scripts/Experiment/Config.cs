@@ -64,17 +64,14 @@ public class Config : MonoBehaviour {
 	public static float pauseAtTreasureTime = 1.5f;
 
 
-	public static string initialInstructions1 = "Welcome to Treasure Island!" + 
-		"\n\nYou are going on a treasure hunt." + 
-			"\n\nUse the joystick to control your movement." + 
-			"\n\nDrive into treasure chests to open them. Remember where each object is located!";
+	public static string initialInstructions1 = "Virtual loft apartment game" +
+		"\n\nPart 1: Go explore the loft and collect all the coins." +
+		"\n\nUse the left joystick to move around." +
+		"\n\nPress (A) to start!";
 
-	public static string initialInstructions2 = "TIPS FOR MAXIMIZING YOUR SCORE" + 
-		"\n\nGet a time bonus by driving to the chests quickly." + 
-			"\n\nIf you are more than 50% sure of an object's location, you should say you remember." + 
-			"\n\nIf you say you are very sure, you should be at least 75% accurate." + 
-			"\n\nPress (X) to begin!";
-
+	public static string overheadIntroInstruction = "Part 2: Now you’ll go to different locations in the loft." +
+		"\n\nAfterwards, a map will appear and you’ll retrace the path you took." +
+		"\n\nPress (A) to start.";
 
 	public static float minObjselectionUITime = 0.5f;
 	public static float minInitialInstructionsTime = 0.0f; //TODO: change back to 5.0f
