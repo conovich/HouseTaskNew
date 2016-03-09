@@ -53,7 +53,7 @@ public class TrialController : MonoBehaviour {
 			practiceTrial = new Trial(true);	//2 special objects for practice trial
 		}
 
-		ProcessTrialTypes ();
+		//ProcessTrialTypes ();
 
 	}
 
@@ -356,8 +356,10 @@ public class TrialController : MonoBehaviour {
 			//exp.overheadMap.LockCursor(false);
 		}
 		//exp.overheadMap.mapCursor.StartPath();
-		yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction(goToLocationInstruction, true, false, false, 3.0f));
-		//yield return new WaitForSeconds(1.5f);
+		//yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction(goToLocationInstruction, true, false, false, 3.0f));
+		exp.instructionsController.SetInstructionsColorful();
+		exp.instructionsController.DisplayText(goToLocationInstruction);
+		yield return new WaitForSeconds(3.0f);
 		exp.overheadMap.LockCursor(false);
 		while(!exp.overheadMap.mapCursor.controls.isMoving){ //wait for input 
 			yield return 0;
@@ -365,6 +367,7 @@ public class TrialController : MonoBehaviour {
 
 		//once player starts moving cursor, turn off instructions
 		exp.instructionsController.SetInstructionsBlank();
+		exp.instructionsController.SetInstructionsTransparentOverlay();
 
 		//wait for button press to indicate travel is over
 		yield return StartCoroutine(exp.WaitForActionButton());
