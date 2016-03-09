@@ -159,7 +159,11 @@ public class TrialController : MonoBehaviour {
 
 			//show instructions for exploring, wait for the action button
 			trialLogger.LogInstructionEvent();
-			yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minInitialInstructionsTime));
+			//yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minInitialInstructionsTime));
+			exp.instructionsController.SetInstructionsBlank();
+			exp.instructionsController.SetInstructionsTransparentOverlay();
+			yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minDefaultInstructionTime));
+
 
 			//let player explore until the button is pressed again
 			trialLogger.LogLearningExplorationEvent(true);
