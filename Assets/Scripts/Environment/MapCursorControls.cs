@@ -74,16 +74,16 @@ public class MapCursorControls : MonoBehaviour {
 		RectTransform rt = GetComponent<RectTransform>();
 
 		rt.position += upVec;
-		if(transform.position.y > upBound.position.y){
+		/*if(transform.position.y > upBound.position.y){
 			rt.position = new Vector3(rt.position.x, upBound.position.y, rt.position.z);
 		}
 		else if (transform.position.y < downBound.position.y){
 			rt.position = new Vector3(rt.position.x, downBound.position.y, rt.position.z);
-		}
+		}*/
 
 		rt.position += rightVec;
 		//if transform.position is between the two other points -- in x & z, on a line -- we're good
-		if(!IsPointBetween(transform.position, rightBound.position, leftBound.position)){
+		/*if(!IsPointBetween(transform.position, rightBound.position, leftBound.position)){
 			float leftDist = (transform.position - leftBound.position).magnitude;
 			float rightDist = (transform.position - rightBound.position).magnitude;
 
@@ -93,13 +93,6 @@ public class MapCursorControls : MonoBehaviour {
 			else{
 				rt.position = new Vector3(leftBound.position.x, rt.position.y, leftBound.position.z);
 			}
-		}
-
-		/*if(transform.position.x > rightBound.position.x){
-			rt.position = new Vector3(rightBound.position.x, rt.position.y, rt.position.z);
-		}
-		else if (transform.position.x < leftBound.position.x){
-			rt.position = new Vector3(leftBound.position.x, rt.position.y, rt.position.z);
 		}*/
 
 	}

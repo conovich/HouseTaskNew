@@ -303,8 +303,6 @@ public class TrialController : MonoBehaviour {
 		}
 		else{
 			goToLocationInstruction = "Follow the same path to the " + currentTrial.desiredItemLocation.name + " that you took on the overhead map.";
-		
-			exp.player.controls.Rotate(180.0f);
 		}
 			
 		//START NAVIGATION
@@ -331,7 +329,6 @@ public class TrialController : MonoBehaviour {
 		trialLogger.LogOverheadTrial(true);
 
 		string goToLocationInstruction = "";
-
 
 		if(isStart){
 			//TODO: put the player cursor in the right start location!!
@@ -380,6 +377,9 @@ public class TrialController : MonoBehaviour {
 		exp.overheadMap.TurnOn(false);
 
 		trialLogger.LogOverheadTrial(false);
+
+		//TODO: change this if we change the trial 2D vs 3D first stuff...
+		exp.player.controls.Rotate(180.0f);
 	}
 
 	IEnumerator ShowFeedback(List<int> specialObjectOrder, List<Vector3> chosenPositions, List<bool> rememberResponses, List<bool> areYouSureResponses){
