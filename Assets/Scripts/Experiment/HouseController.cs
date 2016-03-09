@@ -62,7 +62,10 @@ public class HouseController : MonoBehaviour {
 					Debug.Log("TRIAL TYPES: Not enough sessions to choose from!");
 				}
 
-				int locID = int.Parse(locIDsPerSession[sessionIndex]);
+
+				string locIDString = locIDsPerSession[sessionIndex];
+				locIDString = locIDString.Replace("\r", "");
+				int locID = int.Parse(locIDString);
 				
 				ItemLocation currLoc = GetItemByID(locID);
 				if(currLoc != null){
