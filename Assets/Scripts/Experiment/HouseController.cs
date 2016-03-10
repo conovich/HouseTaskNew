@@ -54,7 +54,8 @@ public class HouseController : MonoBehaviour {
 		foreach (string line in lines) {
 			if(line != ""){
 
-				string[] locIDsPerSession = line.Split('\t');
+				string cleanLine = line.Replace("\r", "");
+				string[] locIDsPerSession = cleanLine.Split('\t');
 
 				int sessionIndex = Experiment.sessionID;
 				if(Experiment.sessionID >= locIDsPerSession.Length){
