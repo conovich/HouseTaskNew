@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ItemLocation : MonoBehaviour {
 
-	int ID;
+	public int ID;
 
 	// Use this for initialization
 	void Start () {

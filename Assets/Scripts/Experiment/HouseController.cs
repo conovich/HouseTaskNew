@@ -34,9 +34,13 @@ public class HouseController : MonoBehaviour {
 
 				locName = locName.Replace("\r", "");
 
-				ItemLocation currLoc = GetItemByName(locName);
+				/*ItemLocation currLoc = GetItemByName(locName);
 				if(currLoc != null){
 					currLoc.SetID(ID);
+				}*/
+				ItemLocation currLoc = GetItemByID(ID);
+				if(currLoc != null){
+					currLoc.name = locName;
 				}
 			}
 		}
