@@ -326,7 +326,9 @@ public class TrialController : MonoBehaviour {
 		yield return StartCoroutine (exp.player.WaitForItemCollision (currentTrial.desiredItemLocation, GameTimer));
 		GameTimer.StopTimer();
 
-		yield return StartCoroutine(exp.player.controls.MoveToTargetItemThroughGates(currentTrial.desiredItemLocation));
+		if (GameTimer.GetSecondsFloat() <= 0.0f) { //if the time ran out before you got to the target... auto drive there!
+			yield return StartCoroutine (exp.player.controls.MoveToTargetItemThroughWaypoints (currentTrial.desiredItemLocation));
+		}
 
 		exp.instructionsController.TurnOffInstructions();
 		

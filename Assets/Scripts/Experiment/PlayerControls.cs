@@ -145,27 +145,33 @@ public class PlayerControls : MonoBehaviour{
 		transform.RotateAround(transform.position, Vector3.up, degrees);
 	}
 
-	public IEnumerator MoveToTargetItemThroughGates(ItemLocation target){
-		List<Transform> shortestGatePath = exp.houseController.GetShortestGatePath(transform.position, target.playerSpotTransform.position);
+	public IEnumerator MoveToTargetItemThroughWaypoints(ItemLocation target){
+		List<Transform> shortestWaypointPath = exp.houseController.GetShortestWaypointPath(transform.position, target.playerSpotTransform.position);
 		Quaternion targetRotation;
 		float distance = 0.0f;
+		//float angleDiff = 0.0f;
 		float travelTime = 0.0f;
+		Vector3 rotatedForwardDir;
 
 		Vector3 targetPos = transform.position;
-		for(int i = 0; i < shortestGatePath.Count; i++){
-			Transform targetGateTransform = shortestGatePath[i];
-			targetRotation = UsefulFunctions.GetDesiredRotation(transform, targetGateTransform);
-			
-			distance = UsefulFunctions.GetDistance(transform.position, targetGateTransform.position);
+		for(int i = 0; i < shortestWaypointPath.Count; i++){
+			Transform targetWaypointTransform = shortestWaypointPath[i];
+			targetRotation = UsefulFunctions.GetDesiredRotation(transform, targetWaypointTransform);
+			rotatedForwardDir = UsefulFunctions.GetRotatedForwardDir (transform, targetRotation);
+
+			distance = UsefulFunctions.GetDistance(transform.position, targetWaypointTransform.position);
+			//angleDiff = UsefulFunctions.GetSmallestAngleBetweenVectors(transform.forward, rotatedForwardDir);
 			travelTime = distance / Config.autoDriveSpeed;
 
-			targetPos = new Vector3(targetGateTransform.position.x, transform.position.y, targetGateTransform.position.z);
+			targetPos = new Vector3(targetWaypointTransform.position.x, transform.position.y, targetWaypointTransform.position.z);
 			yield return StartCoroutine(SmoothMoveTo(targetPos, targetRotation, travelTime));
 		}
 		//move to final target player spot
 		targetRotation = UsefulFunctions.GetDesiredRotation(target.playerSpotTransform, target.transform); //we want to be looking at the item FROM the player spot
 
 		targetPos = new Vector3(target.playerSpotTransform.position.x, transform.position.y, target.playerSpotTransform.position.z);
+		rotatedForwardDir = UsefulFunctions.GetRotatedForwardDir (transform, targetRotation);
+		//angleDiff = UsefulFunctions.GetSmallestAngleBetweenVectors(transform.forward, rotatedForwardDir);
 		distance = UsefulFunctions.GetDistance(transform.position, targetPos);
 
 		travelTime = distance / Config.autoDriveSpeed;

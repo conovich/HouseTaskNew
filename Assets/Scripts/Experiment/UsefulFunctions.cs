@@ -90,4 +90,30 @@ public class UsefulFunctions {
 
 		return desiredRotation;
 	}
+
+	public static float GetSmallestAngleBetweenVectors(Vector3 fromVec, Vector3 toVec){
+		float fromLength = fromVec.magnitude;
+		float toLength = toVec.magnitude;
+
+		float dotProd = Vector3.Dot (fromVec, toVec);
+
+		float cosTheta = dotProd / (fromLength * toLength);
+		float theta = Mathf.Acos (cosTheta);
+
+		//pretty sure this isn't an issue but...
+		if (theta > 180.0f) {
+			theta = 360.0f - theta;
+		}
+
+		return theta;
+	}
+
+	public static Vector3 GetRotatedForwardDir(Transform t, Quaternion newRot){
+		Quaternion origRot = t.rotation;
+		t.rotation = newRot;
+		Vector3 rotatedForwardDir = t.forward;
+		t.rotation = origRot;
+
+		return rotatedForwardDir;
+	}
 }

@@ -87,7 +87,7 @@ public class Config : MonoBehaviour {
 	//drive variables
 	public static float driveSpeed = 3.5f;
 	public static float cursorDriveSpeed = 0.001f;
-	public static float autoDriveSpeed = 2.0f;
+	public static float autoDriveSpeed = 2.0f; //0.5f if using rotation...
 
 	//object buffer variables
 
