@@ -23,10 +23,11 @@ public class Config : MonoBehaviour {
 
 
     //LOCATOR COLLECTION VARIABLES
-    public static float totalLearningTime = 240.0f;
+	public static float totalLearningTime = 240.0f;
 	public static int learningLocatorScore = 10;
 	public static float learningTimeToPassUntilArrows = 180.0f;
 
+	public static float max3DTrialTime = 30.0f;
 
 	//stimulation variables
 	public static bool shouldDoStim;	//TODO
@@ -86,6 +87,7 @@ public class Config : MonoBehaviour {
 	//drive variables
 	public static float driveSpeed = 3.5f;
 	public static float cursorDriveSpeed = 0.001f;
+	public static float autoDriveSpeed = 2.0f;
 
 	//object buffer variables
 

@@ -19,7 +19,7 @@ public class TrialController : MonoBehaviour {
 	public CanvasGroup PauseUI;
 	public CanvasGroup ConnectionUI;
 
-	public SimpleTimer LearningTimer;
+	public SimpleTimer GameTimer;
 
 	//public CanvasGroup initialInstructions;
 	//public CanvasGroup trialPhaseInstructions;
@@ -223,13 +223,13 @@ public class TrialController : MonoBehaviour {
 
 		exp.player.controls.GoToStartPosition();
 
-		LearningTimer.SetTimerMaxTime(Config.totalLearningTime);
-		LearningTimer.StartTimer();
-		while(LearningTimer.IsRunning){
+		GameTimer.ResetTimer(Config.totalLearningTime);
+		GameTimer.StartTimer();
+		while(GameTimer.IsRunning){
 			if(exp.learningLocatorController.GetActiveNumLocators() <= 0){
 				exp.learningLocatorController.ReActivateAllLocators();
 			}
-			float timePassed = Config.totalLearningTime - LearningTimer.GetSecondsFloat();
+			float timePassed = Config.totalLearningTime - GameTimer.GetSecondsFloat();
 			if(timePassed >= Config.learningTimeToPassUntilArrows && !exp.learningLocatorController.hasRegenerated){
 				exp.player.shouldUseArrows = true;
 			}
@@ -311,7 +311,7 @@ public class TrialController : MonoBehaviour {
 			
 		//START NAVIGATION
 		trialLogger.LogTrialNavigation (true);
-		
+
 		//unlock avatar controls
 		exp.player.LockControls(false);
 		
@@ -321,7 +321,13 @@ public class TrialController : MonoBehaviour {
 		
 		
 		//wait for player to hit target item
-		yield return StartCoroutine (exp.player.WaitForItemCollision (currentTrial.desiredItemLocation));
+		GameTimer.ResetTimer(Config.max3DTrialTime);
+		GameTimer.StartTimer();
+		yield return StartCoroutine (exp.player.WaitForItemCollision (currentTrial.desiredItemLocation, GameTimer));
+		GameTimer.StopTimer();
+
+		yield return StartCoroutine(exp.player.controls.MoveToTargetItemThroughGates(currentTrial.desiredItemLocation));
+
 		exp.instructionsController.TurnOffInstructions();
 		
 		trialLogger.LogTrialNavigation (false);

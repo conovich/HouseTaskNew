@@ -227,13 +227,20 @@ public class Player : MonoBehaviour {
 		return currentCollisionObject;
 	}
 
-	public IEnumerator WaitForItemCollision(ItemLocation item){
+	public IEnumerator WaitForItemCollision(ItemLocation item, SimpleTimer timer){
 		Debug.Log("WAITING FOR COLLISION WITH: " + item.name);
 		
 		string lastCollisionName = "";
 		//while(true){
-		while (lastCollisionName != item.name) {
-			if(currentCollisionObject != null){
+		bool isTimerRunning = true;
+		if(timer != null){
+			isTimerRunning = timer.IsRunning;
+		}
+		while (lastCollisionName != item.name && isTimerRunning) {
+			if(timer != null){
+				isTimerRunning = timer.IsRunning;
+			}
+			if(currentCollisionObject != null && isTimerRunning){
 				lastCollisionName = currentCollisionObject.name;
 			}
 			yield return 0;

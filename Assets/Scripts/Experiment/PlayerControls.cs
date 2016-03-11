@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerControls : MonoBehaviour{
 
@@ -144,6 +145,32 @@ public class PlayerControls : MonoBehaviour{
 		transform.RotateAround(transform.position, Vector3.up, degrees);
 	}
 
+	public IEnumerator MoveToTargetItemThroughGates(ItemLocation target){
+		List<Transform> shortestGatePath = exp.houseController.GetShortestGatePath(transform.position, target.playerSpotTransform.position);
+		Quaternion targetRotation;
+		float distance = 0.0f;
+		float travelTime = 0.0f;
+
+		Vector3 targetPos = transform.position;
+		for(int i = 0; i < shortestGatePath.Count; i++){
+			Transform targetGateTransform = shortestGatePath[i];
+			targetRotation = UsefulFunctions.GetDesiredRotation(transform, targetGateTransform);
+			
+			distance = UsefulFunctions.GetDistance(transform.position, targetGateTransform.position);
+			travelTime = distance / Config.autoDriveSpeed;
+
+			targetPos = new Vector3(targetGateTransform.position.x, transform.position.y, targetGateTransform.position.z);
+			yield return StartCoroutine(SmoothMoveTo(targetPos, targetRotation, travelTime));
+		}
+		//move to final target player spot
+		targetRotation = UsefulFunctions.GetDesiredRotation(target.playerSpotTransform, target.transform); //we want to be looking at the item FROM the player spot
+
+		targetPos = new Vector3(target.playerSpotTransform.position.x, transform.position.y, target.playerSpotTransform.position.z);
+		distance = UsefulFunctions.GetDistance(transform.position, targetPos);
+
+		travelTime = distance / Config.autoDriveSpeed;
+		yield return StartCoroutine(SmoothMoveTo(targetPos, targetRotation, travelTime));
+	}
 
 	public IEnumerator SmoothMoveTo(Vector3 targetPosition, Quaternion targetRotation, float timeToTravel){
 
@@ -193,9 +220,7 @@ public class PlayerControls : MonoBehaviour{
 
 	public IEnumerator RotateTowardSpecialObject(GameObject target){
 		Quaternion origRotation = transform.rotation;
-		Vector3 targetPosition = new Vector3 (target.transform.position.x, transform.position.y, target.transform.position.z);
-		transform.LookAt(targetPosition);
-		Quaternion desiredRotation = transform.rotation;
+		Quaternion desiredRotation = UsefulFunctions.GetDesiredRotation(transform, target.transform);
 		
 		float angleDifference = origRotation.eulerAngles.y - desiredRotation.eulerAngles.y;
 		angleDifference = Mathf.Abs (angleDifference);

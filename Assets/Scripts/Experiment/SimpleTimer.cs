@@ -6,7 +6,7 @@ public class SimpleTimer : MonoBehaviour {
 
 	public Text timerText;
 	float secondsLeft = 0;
-	float maxSeconds = 0;
+	//float maxSeconds = 0;
 
 	bool isRunning = false;
 	public bool IsRunning { get { return isRunning; } } //public getter. don't want people setting isRunning outside of here.
@@ -45,22 +45,18 @@ public class SimpleTimer : MonoBehaviour {
 		}
 	}
 
-	public void SetTimerMaxTime(float numSeconds){
-		maxSeconds = numSeconds;
-	}
-
 	public void StartTimer(){
 		isRunning = true;
-		secondsLeft = maxSeconds;
+		//secondsLeft = maxSeconds;
 	}
 
 	public void StopTimer(){
 		isRunning = false;
 	}
 
-	public void ResetTimer(){
-		myResetDelegate ();
-		secondsLeft = 0;
+	public void ResetTimer(float numSeconds){
+		//myResetDelegate ();
+		secondsLeft = numSeconds;
 	}
 
 	public int GetSecondsInt(){
