@@ -91,21 +91,18 @@ public class UsefulFunctions {
 		return desiredRotation;
 	}
 
-	public static float GetSmallestAngleBetweenVectors(Vector3 fromVec, Vector3 toVec){
-		float fromLength = fromVec.magnitude;
-		float toLength = toVec.magnitude;
+	public static float GetSmallestYAngleDifference(Quaternion a, Quaternion b){
+		float eulerY_A = a.eulerAngles.y;
+		float eulerY_B = b.eulerAngles.y;
 
-		float dotProd = Vector3.Dot (fromVec, toVec);
+		float difference = Mathf.Abs(eulerY_A - eulerY_B);
 
-		float cosTheta = dotProd / (fromLength * toLength);
-		float theta = Mathf.Acos (cosTheta);
-
-		//pretty sure this isn't an issue but...
-		if (theta > 180.0f) {
-			theta = 360.0f - theta;
+		if(difference > 180.0f){
+			Debug.Log("orig angle diff: " + difference);
+			difference = 360.0f - difference;
 		}
 
-		return theta;
+		return difference;
 	}
 
 	public static Vector3 GetRotatedForwardDir(Transform t, Quaternion newRot){

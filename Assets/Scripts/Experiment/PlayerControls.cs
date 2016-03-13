@@ -149,36 +149,36 @@ public class PlayerControls : MonoBehaviour{
 		List<Transform> shortestWaypointPath = exp.houseController.GetShortestWaypointPath(transform.position, target.playerSpotTransform.position);
 		Quaternion targetRotation;
 		float distance = 0.0f;
-		//float angleDiff = 0.0f;
 		float travelTime = 0.0f;
-		Vector3 rotatedForwardDir;
 
 		Vector3 targetPos = transform.position;
 		for(int i = 0; i < shortestWaypointPath.Count; i++){
 			Transform targetWaypointTransform = shortestWaypointPath[i];
-			targetRotation = UsefulFunctions.GetDesiredRotation(transform, targetWaypointTransform);
-			rotatedForwardDir = UsefulFunctions.GetRotatedForwardDir (transform, targetRotation);
-
+			bool shouldFinishTurn = false;
+			if(i != shortestWaypointPath.Count - 1){
+				targetRotation = UsefulFunctions.GetDesiredRotation(transform, targetWaypointTransform);
+			}
+			else{
+				shouldFinishTurn = true;
+				targetRotation = UsefulFunctions.GetDesiredRotation(targetWaypointTransform, target.transform);
+			}
 			distance = UsefulFunctions.GetDistance(transform.position, targetWaypointTransform.position);
-			//angleDiff = UsefulFunctions.GetSmallestAngleBetweenVectors(transform.forward, rotatedForwardDir);
 			travelTime = distance / Config.autoDriveSpeed;
 
 			targetPos = new Vector3(targetWaypointTransform.position.x, transform.position.y, targetWaypointTransform.position.z);
-			yield return StartCoroutine(SmoothMoveTo(targetPos, targetRotation, travelTime));
+			yield return StartCoroutine(SmoothMoveTo(targetPos, targetRotation, travelTime, true, shouldFinishTurn));
 		}
-		//move to final target player spot
+		/*//move to final target player spot
 		targetRotation = UsefulFunctions.GetDesiredRotation(target.playerSpotTransform, target.transform); //we want to be looking at the item FROM the player spot
 
 		targetPos = new Vector3(target.playerSpotTransform.position.x, transform.position.y, target.playerSpotTransform.position.z);
-		rotatedForwardDir = UsefulFunctions.GetRotatedForwardDir (transform, targetRotation);
-		//angleDiff = UsefulFunctions.GetSmallestAngleBetweenVectors(transform.forward, rotatedForwardDir);
 		distance = UsefulFunctions.GetDistance(transform.position, targetPos);
 
 		travelTime = distance / Config.autoDriveSpeed;
-		yield return StartCoroutine(SmoothMoveTo(targetPos, targetRotation, travelTime));
+		yield return StartCoroutine(SmoothMoveTo(targetPos, targetRotation, travelTime, true));*/
 	}
 
-	public IEnumerator SmoothMoveTo(Vector3 targetPosition, Quaternion targetRotation, float timeToTravel){
+	public IEnumerator SmoothMoveTo(Vector3 targetPosition, Quaternion targetRotation, float timeToTravel, bool usePlayerTurnSpeed, bool finishTurn){
 
 		SetTilt (0.0f, 1.0f);
 
@@ -190,6 +190,13 @@ public class PlayerControls : MonoBehaviour{
 		Vector3 origPosition = transform.position;
 
 		//float travelDistance = (origPosition - targetPosition).magnitude;
+
+		//get total time to rotate at the player's speed
+		//Vector3 rotatedForwardDir = UsefulFunctions.GetRotatedForwardDir(transform, targetRotation);
+		float angleToRotate = UsefulFunctions.GetSmallestYAngleDifference(transform.rotation, targetRotation);
+		float totalTimeToRotate = angleToRotate / RotationSpeed;  //speed is in degrees per second
+
+		float percentageRotationTime = 0.0f;
 
 		float tElapsed = 0.0f;
 
@@ -203,19 +210,38 @@ public class PlayerControls : MonoBehaviour{
 
 			tElapsed += Time.deltaTime;
 
-			float percentageTime = tElapsed / timeToTravel;
+			float percentageMoveTime = tElapsed / timeToTravel;
+			if(totalTimeToRotate != 0){
+				percentageRotationTime = tElapsed / totalTimeToRotate;
+			}
+			if(!usePlayerTurnSpeed){ //if we're not using the player speed, just finish the rotation by the end of the move time
+				percentageRotationTime = percentageMoveTime;
+			}
+
+			//float amountToRotate = RotationSpeed * Time.deltaTime; //framerate independent!
 
 			//will spherically interpolate the rotation for config.spinTime seconds
-			transform.rotation = Quaternion.Slerp(origRotation, targetRotation, percentageTime); //SLERP ALWAYS TAKES THE SHORTEST PATH.
-			transform.position = Vector3.Lerp(origPosition, targetPosition, percentageTime);
+			transform.rotation = Quaternion.Slerp(origRotation, targetRotation, percentageRotationTime); //SLERP ALWAYS TAKES THE SHORTEST PATH.
+			transform.position = Vector3.Lerp(origPosition, targetPosition, percentageMoveTime);
 
 
 			yield return 0;
 		}
+
+		if(usePlayerTurnSpeed){ //if we're using the player's turn speed...
+			while(tElapsed < totalTimeToRotate && finishTurn){ //...and the total rotation time hasn't passed yet... finish rotating!
+				tElapsed += Time.deltaTime;
+				percentageRotationTime = tElapsed / totalTimeToRotate;
+				transform.rotation = Quaternion.Slerp(origRotation, targetRotation, percentageRotationTime); //SLERP ALWAYS TAKES THE SHORTEST PATH.
+				yield return 0;
+			}
+		}
 		
 		//Debug.Log ("TOTAL TIME ELAPSED FOR SMOOTH MOVE: " + totalTimeElapsed);
 
-		transform.rotation = targetRotation;
+		if(finishTurn || !usePlayerTurnSpeed){
+			transform.rotation = targetRotation;
+		}
 		transform.position = targetPosition;
 
 		//enable collisions again
