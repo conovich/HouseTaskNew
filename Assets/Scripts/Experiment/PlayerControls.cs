@@ -11,6 +11,7 @@ public class PlayerControls : MonoBehaviour{
 
 	public Transform TiltableTransform;
 	public Transform startTransform;
+	public Transform TwoDPhaseTransform;
 
 	float RotationSpeed = 30.0f;
 	

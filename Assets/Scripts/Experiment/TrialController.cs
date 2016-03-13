@@ -352,6 +352,8 @@ public class TrialController : MonoBehaviour {
 
 		//lock avatar controls
 		exp.player.LockControls(true);
+		Vector3 playerOrigPos = exp.player.transform.position;
+		exp.player.transform.position = exp.player.controls.TwoDPhaseTransform.position;
 
 		exp.overheadMap.TurnOn(true);
 		trialLogger.LogTrialNavigation (true);
@@ -392,6 +394,7 @@ public class TrialController : MonoBehaviour {
 
 		//TODO: change this if we change the trial 2D vs 3D first stuff...
 		exp.player.controls.Rotate(180.0f);
+		exp.player.transform.position = playerOrigPos;
 	}
 
 	IEnumerator ShowFeedback(List<int> specialObjectOrder, List<Vector3> chosenPositions, List<bool> rememberResponses, List<bool> areYouSureResponses){
