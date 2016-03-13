@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent (typeof (CanvasGroup))]
 [RequireComponent (typeof (CanvasGroupLogTrack))]
@@ -8,6 +9,10 @@ public class OverheadMap : MonoBehaviour {
 	public bool isVisibleOnAwake = false;
 	public MapCursor mapCursor;
 
+	public GameObject overheadItemLocationParent;
+	ItemLocation[] overheadItemLocations;
+
+
 	void Awake(){
 		if(isVisibleOnAwake){
 			TurnOn(true);
@@ -15,6 +20,12 @@ public class OverheadMap : MonoBehaviour {
 		else{
 			TurnOn(false);
 		}
+
+		GetOverheadLocations();
+	}
+
+	void GetOverheadLocations(){
+		overheadItemLocations = overheadItemLocationParent.GetComponentsInChildren<ItemLocation>();
 	}
 
 	// Use this for initialization
@@ -41,5 +52,22 @@ public class OverheadMap : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	ItemLocation GetItemLocation(int locID){
+		for(int i = 0; i < overheadItemLocations.Length; i++){
+			if(overheadItemLocations[i].ID == locID){
+				return overheadItemLocations[i];
+			}
+		}
+		Debug.Log("No location with this ID!");
+		return null;
+	}
+
+	public void MoveCursorToLocation(int locID){
+		ItemLocation loc = GetItemLocation(locID);
+		if(loc != null){
+			mapCursor.transform.position = loc.transform.position;
+		}
 	}
 }

@@ -395,6 +395,9 @@ public class TrialController : MonoBehaviour {
 		//TODO: change this if we change the trial 2D vs 3D first stuff...
 		exp.player.controls.Rotate(180.0f);
 		exp.player.transform.position = playerOrigPos;
+
+		//move cursor to correct location...
+		exp.overheadMap.MoveCursorToLocation(currentTrial.desiredItemLocation.ID);
 	}
 
 	IEnumerator ShowFeedback(List<int> specialObjectOrder, List<Vector3> chosenPositions, List<bool> rememberResponses, List<bool> areYouSureResponses){
