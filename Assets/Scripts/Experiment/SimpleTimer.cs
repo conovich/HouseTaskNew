@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class SimpleTimer : MonoBehaviour {
 
+	public AudioSource OutOfTimeAudio;
+
 	public Text timerText;
 	float secondsLeft = 0;
 	//float maxSeconds = 0;
@@ -32,6 +34,9 @@ public class SimpleTimer : MonoBehaviour {
 		if(secondsLeft < 0.0f){
 			secondsLeft = 0.0f;
 			isRunning = false;
+			if(OutOfTimeAudio != null){
+				OutOfTimeAudio.Play();
+			}
 		}
 
 		if(timerText != null){
