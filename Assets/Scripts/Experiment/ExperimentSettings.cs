@@ -86,7 +86,11 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 
 
 	void ResetDefaultLoggingPaths(){
-		defaultLoggingPath = "/Users/" + System.Environment.UserName + "/RAM_2.0/data";
+		if (Config.isSystem2) {
+			defaultLoggingPath = "/Users/" + System.Environment.UserName + "/RAM_2.0/data";
+		} else {
+			defaultLoggingPath = "/Users/" + System.Environment.UserName + "/RAM/data";
+		}
 	}
 
 	void InitLoggingPath(){
