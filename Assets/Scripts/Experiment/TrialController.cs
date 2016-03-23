@@ -15,10 +15,6 @@ public class TrialController : MonoBehaviour {
 	//2D vs 3D trials
 	public TextAsset TrialTypeFile;
 
-	//UI
-	public CanvasGroup PauseUI;
-	public CanvasGroup ConnectionUI;
-
 	public SimpleTimer GameTimer;
 
 	//public CanvasGroup initialInstructions;
@@ -131,14 +127,14 @@ public class TrialController : MonoBehaviour {
 
 		if (isPaused) {
 			//exp.player.controls.Pause(true);
-			PauseUI.alpha = 1.0f;
+			exp.uiController.PauseUI.alpha = 1.0f;
 			Time.timeScale = 0.0f;
 		} 
 		else {
 			Time.timeScale = 1.0f;
 			//exp.player.controls.Pause(false);
 			//exp.player.LockControls(false);
-			PauseUI.alpha = 0.0f;
+			exp.uiController.PauseUI.alpha = 0.0f;
 		}
 	}
 
@@ -147,6 +143,7 @@ public class TrialController : MonoBehaviour {
 	public IEnumerator RunExperiment(){
 		if (!ExperimentSettings.isReplay) {
 			exp.fullInstructionsPanel.TurnOffInstructions();
+			exp.instructionsController.TurnOffInstructions ();
 
 			exp.player.LockControls(true);
 
@@ -154,16 +151,16 @@ public class TrialController : MonoBehaviour {
 				yield return StartCoroutine( WaitForEEGHardwareConnection() );
 			}
 			else{
-				ConnectionUI.alpha = 0.0f;
+				exp.uiController.ConnectionUI.alpha = 0.0f;
 			}
 
 			//show instructions for exploring, wait for the action button
 			trialLogger.LogInstructionEvent();
-			//yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minInitialInstructionsTime));
-			exp.instructionsController.SetInstructionsBlank();
-			exp.instructionsController.SetInstructionsTransparentOverlay();
-			yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minDefaultInstructionTime));
 
+			//yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minDefaultInstructionTime));
+			exp.fullInstructionsPanel.SetInstructionsColorful();
+			yield return StartCoroutine(exp.uiController.TurnOnCanvasGroup(exp.uiController.Part1InstructionsUI, true, 0.0f));
+			exp.fullInstructionsPanel.SetInstructionsTransparentOverlay ();
 
 			//let player explore until the button is pressed again
 			trialLogger.LogLearningExplorationEvent(true);
@@ -184,7 +181,10 @@ public class TrialController : MonoBehaviour {
 			}
 
 
-			yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.overheadIntroInstruction, true, true, false, Config.minDefaultInstructionTime));
+			//yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.overheadIntroInstruction, true, true, false, Config.minDefaultInstructionTime));
+			exp.fullInstructionsPanel.SetInstructionsColorful();
+			yield return StartCoroutine(exp.uiController.TurnOnCanvasGroup(exp.uiController.Part2InstructionsUI, true, 0.0f));
+			exp.fullInstructionsPanel.SetInstructionsTransparentOverlay ();
 
 			exp.player.controls.GoToStartPosition();
 
@@ -246,7 +246,7 @@ public class TrialController : MonoBehaviour {
 	IEnumerator WaitForEEGHardwareConnection(){
 		isConnectingToHardware = true;
 
-		ConnectionUI.alpha = 1.0f;
+		exp.uiController.ConnectionUI.alpha = 1.0f;
 		if(ExperimentSettings.isSystem2){
 			while(!TCPServer.Instance.isConnected || !TCPServer.Instance.canStartGame){
 				Debug.Log("Waiting for system 2 connection...");
@@ -259,7 +259,7 @@ public class TrialController : MonoBehaviour {
 				yield return 0;
 			}
 		}
-		ConnectionUI.alpha = 0.0f;
+		exp.uiController.ConnectionUI.alpha = 0.0f;
 		isConnectingToHardware = false;
 	}
 	

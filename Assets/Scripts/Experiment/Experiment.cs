@@ -25,6 +25,9 @@ public class Experiment : MonoBehaviour {
 	//score controller
 	public ScoreController scoreController;
 
+	//UI controller
+	public UIController uiController;
+
 	//object controller
 	public ObjectController objectController;
 
