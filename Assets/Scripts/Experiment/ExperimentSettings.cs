@@ -56,7 +56,7 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 
 	//LOGGING PATH
 	public static string defaultLoggingPath = ""; //SET IN RESETDEFAULTPATHS();
-	string ExpVersionFolder1 = "/EXP/"; //TODO: change for your experiment!
+	string ExpVersionFolder1 = "/HouseTask/"; //TODO: change for your experiment!
 	public Text defaultLoggingPathDisplay;
 	public InputField loggingPathInputField;
 
@@ -97,7 +97,7 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 		ResetDefaultLoggingPaths ();
 		
 		if(Directory.Exists(defaultLoggingPath)){
-			if (Config.BuildVersion == Config.Version.ExpName) {
+			if (Config.BuildVersion == Config.Version.HouseTask) {
 				defaultLoggingPath += ExpVersionFolder1;
 			} 
 			
