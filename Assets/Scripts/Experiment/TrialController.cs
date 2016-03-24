@@ -147,7 +147,7 @@ public class TrialController : MonoBehaviour {
 
 			exp.player.LockControls(true);
 
-			if(ExperimentSettings.isSystem2 || ExperimentSettings.isSyncbox){
+			if(Config.isSystem2 || Config.isSyncbox){
 				yield return StartCoroutine( WaitForEEGHardwareConnection() );
 			}
 			else{
@@ -247,13 +247,13 @@ public class TrialController : MonoBehaviour {
 		isConnectingToHardware = true;
 
 		exp.uiController.ConnectionUI.alpha = 1.0f;
-		if(ExperimentSettings.isSystem2){
+		if(Config.isSystem2){
 			while(!TCPServer.Instance.isConnected || !TCPServer.Instance.canStartGame){
 				Debug.Log("Waiting for system 2 connection...");
 				yield return 0;
 			}
 		}
-		else if (ExperimentSettings.isSyncbox){
+		else if (Config.isSyncbox){
 			while(!SyncboxControl.Instance.isUSBOpen){
 				Debug.Log("Waiting for sync box to open...");
 				yield return 0;
