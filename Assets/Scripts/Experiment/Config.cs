@@ -5,10 +5,10 @@ public class Config : MonoBehaviour {
 
 	public enum Version
 	{
-		ExpName //TODO: change this for your experiment!
+		HouseTask //TODO: change this for your experiment!
 	}
 	
-	public static Version BuildVersion = Version.ExpName; //TODO: change this for your experiment!
+	public static Version BuildVersion = Version.HouseTask; //TODO: change this for your experiment!
 	public static string VersionNumber = "2.03"; //TODO: change this for your experiment!
 	
 	public static bool isSyncbox = true;

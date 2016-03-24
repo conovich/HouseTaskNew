@@ -34,8 +34,8 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 	public Toggle loggingToggle; //only exists in main menu -- make sure to null check
 
 	//EEG, STIM/SYNC TOGGLES
-	public static bool isSystem2;
-	public static bool isSyncbox;
+	//public static bool isSystem2;
+	//public static bool isSyncbox;
 
 	public Toggle system2Toggle;
 	public Toggle syncboxToggle;
@@ -56,7 +56,7 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 
 	//LOGGING PATH
 	public static string defaultLoggingPath = ""; //SET IN RESETDEFAULTPATHS();
-	string ExpVersionFolder1 = "/EXP/"; //TODO: change for your experiment!
+	string ExpVersionFolder1 = "/HouseTask/"; //TODO: change for your experiment!
 	public Text defaultLoggingPathDisplay;
 	public InputField loggingPathInputField;
 
@@ -86,14 +86,18 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 
 
 	void ResetDefaultLoggingPaths(){
-		defaultLoggingPath = "/Users/" + System.Environment.UserName + "/RAM_2.0/data";
+		if (Config.isSystem2) {
+			defaultLoggingPath = "/Users/" + System.Environment.UserName + "/RAM_2.0/data";
+		} else {
+			defaultLoggingPath = "/Users/" + System.Environment.UserName + "/RAM/data";
+		}
 	}
 
 	void InitLoggingPath(){
 		ResetDefaultLoggingPaths ();
 		
 		if(Directory.Exists(defaultLoggingPath)){
-			if (Config.BuildVersion == Config.Version.ExpName) {
+			if (Config.BuildVersion == Config.Version.HouseTask) {
 				defaultLoggingPath += ExpVersionFolder1;
 			} 
 			
@@ -132,8 +136,8 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 	// Use this for initialization
 	void Start () {
 		SetOculus();
-		SetSystem2();
-		SetSyncBox();
+		//SetSystem2();
+		//SetSyncBox();
 		if(Application.loadedLevelName == "EndMenu"){
 			if(currentSubject != null){
 				endCongratsText.text = "Congratulations " + currentSubject.name + "!";
@@ -200,7 +204,7 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 		}
 	}
 
-	public void SetSystem2(){
+	/*public void SetSystem2(){
 		if(system2Toggle){
 			isSystem2 = system2Toggle.isOn;
 		}
@@ -210,6 +214,6 @@ public class ExperimentSettings : MonoBehaviour { //should be in main menu AND e
 		if(syncboxToggle){
 			isSyncbox = syncboxToggle.isOn;
 		}
-	}
+	}*/
 	
 }

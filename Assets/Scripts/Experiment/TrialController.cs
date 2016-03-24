@@ -15,10 +15,6 @@ public class TrialController : MonoBehaviour {
 	//2D vs 3D trials
 	public TextAsset TrialTypeFile;
 
-	//UI
-	public CanvasGroup PauseUI;
-	public CanvasGroup ConnectionUI;
-
 	public SimpleTimer GameTimer;
 
 	//public CanvasGroup initialInstructions;
@@ -131,14 +127,14 @@ public class TrialController : MonoBehaviour {
 
 		if (isPaused) {
 			//exp.player.controls.Pause(true);
-			PauseUI.alpha = 1.0f;
+			exp.uiController.PauseUI.alpha = 1.0f;
 			Time.timeScale = 0.0f;
 		} 
 		else {
 			Time.timeScale = 1.0f;
 			//exp.player.controls.Pause(false);
 			//exp.player.LockControls(false);
-			PauseUI.alpha = 0.0f;
+			exp.uiController.PauseUI.alpha = 0.0f;
 		}
 	}
 
@@ -147,23 +143,24 @@ public class TrialController : MonoBehaviour {
 	public IEnumerator RunExperiment(){
 		if (!ExperimentSettings.isReplay) {
 			exp.fullInstructionsPanel.TurnOffInstructions();
+			exp.instructionsController.TurnOffInstructions ();
 
 			exp.player.LockControls(true);
 
-			if(ExperimentSettings.isSystem2 || ExperimentSettings.isSyncbox){
+			if(Config.isSystem2 || Config.isSyncbox){
 				yield return StartCoroutine( WaitForEEGHardwareConnection() );
 			}
 			else{
-				ConnectionUI.alpha = 0.0f;
+				exp.uiController.ConnectionUI.alpha = 0.0f;
 			}
 
 			//show instructions for exploring, wait for the action button
 			trialLogger.LogInstructionEvent();
-			//yield return StartCoroutine (exp.instructionsController.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minInitialInstructionsTime));
-			exp.instructionsController.SetInstructionsBlank();
-			exp.instructionsController.SetInstructionsTransparentOverlay();
-			yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minDefaultInstructionTime));
 
+			//yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.initialInstructions1, true, true, false, Config.minDefaultInstructionTime));
+			exp.fullInstructionsPanel.SetInstructionsColorful();
+			yield return StartCoroutine(exp.uiController.TurnOnCanvasGroup(exp.uiController.Part1InstructionsUI, true, 0.0f));
+			exp.fullInstructionsPanel.SetInstructionsTransparentOverlay ();
 
 			//let player explore until the button is pressed again
 			trialLogger.LogLearningExplorationEvent(true);
@@ -184,7 +181,10 @@ public class TrialController : MonoBehaviour {
 			}
 
 
-			yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.overheadIntroInstruction, true, true, false, Config.minDefaultInstructionTime));
+			//yield return StartCoroutine(exp.fullInstructionsPanel.ShowSingleInstruction (Config.overheadIntroInstruction, true, true, false, Config.minDefaultInstructionTime));
+			exp.fullInstructionsPanel.SetInstructionsColorful();
+			yield return StartCoroutine(exp.uiController.TurnOnCanvasGroup(exp.uiController.Part2InstructionsUI, true, 0.0f));
+			exp.fullInstructionsPanel.SetInstructionsTransparentOverlay ();
 
 			exp.player.controls.GoToStartPosition();
 
@@ -246,20 +246,20 @@ public class TrialController : MonoBehaviour {
 	IEnumerator WaitForEEGHardwareConnection(){
 		isConnectingToHardware = true;
 
-		ConnectionUI.alpha = 1.0f;
-		if(ExperimentSettings.isSystem2){
+		exp.uiController.ConnectionUI.alpha = 1.0f;
+		if(Config.isSystem2){
 			while(!TCPServer.Instance.isConnected || !TCPServer.Instance.canStartGame){
 				Debug.Log("Waiting for system 2 connection...");
 				yield return 0;
 			}
 		}
-		else if (ExperimentSettings.isSyncbox){
+		else if (Config.isSyncbox){
 			while(!SyncboxControl.Instance.isUSBOpen){
 				Debug.Log("Waiting for sync box to open...");
 				yield return 0;
 			}
 		}
-		ConnectionUI.alpha = 0.0f;
+		exp.uiController.ConnectionUI.alpha = 0.0f;
 		isConnectingToHardware = false;
 	}
 	
@@ -302,12 +302,12 @@ public class TrialController : MonoBehaviour {
 		//TODO: move player to start location!
 		//exp.player.transform.position = currentTrial.myTrajectory.startLoc.transform.position;
 
-		if(isStart){
+		/*if(isStart){
 			goToLocationInstruction = "Please go to the " + currentTrial.desiredItemLocation.name + ".";
 		}
 		else{
 			goToLocationInstruction = "Follow the same path to the " + currentTrial.desiredItemLocation.name + " that you took on the overhead map.";
-		}
+		}*/
 			
 		//START NAVIGATION
 		trialLogger.LogTrialNavigation (true);
@@ -316,8 +316,10 @@ public class TrialController : MonoBehaviour {
 		exp.player.LockControls(false);
 		
 		//tell player where to go next
-		exp.instructionsController.SetInstructionsTransparentOverlay();
-		exp.instructionsController.DisplayText(goToLocationInstruction);
+		exp.uiController.GoToLocation3D.text = currentTrial.desiredItemLocation.name;
+		exp.uiController.GoToInstructions3D.alpha = 1.0f;
+		//exp.instructionsController.SetInstructionsTransparentOverlay();
+		//exp.instructionsController.DisplayText(goToLocationInstruction);
 		
 		
 		//wait for player to hit target item
@@ -330,7 +332,8 @@ public class TrialController : MonoBehaviour {
 			yield return StartCoroutine (exp.player.controls.MoveToTargetItemThroughWaypoints (currentTrial.desiredItemLocation));
 		}
 
-		exp.instructionsController.TurnOffInstructions();
+		exp.uiController.GoToInstructions3D.alpha = 0.0f;
+		//exp.instructionsController.TurnOffInstructions();
 		
 		trialLogger.LogTrialNavigation (false);
 
@@ -342,13 +345,13 @@ public class TrialController : MonoBehaviour {
 
 		string goToLocationInstruction = "";
 
-		if(isStart){
+		/*if(isStart){
 			//TODO: put the player cursor in the right start location!!
 			goToLocationInstruction = "Please go to the " + currentTrial.desiredItemLocation.name + " and press (A) when finished.";
 		}
 		else{
 			goToLocationInstruction = "Retrace the path you just took to the " + currentTrial.desiredItemLocation.name + ". \n\nPress (A) when finished.";
-		}
+		}*/
 
 		//lock avatar controls
 		exp.player.LockControls(true);
@@ -368,8 +371,11 @@ public class TrialController : MonoBehaviour {
 		}
 		//exp.overheadMap.mapCursor.StartPath();
 		//yield return StartCoroutine(exp.instructionsController.ShowSingleInstruction(goToLocationInstruction, true, false, false, 3.0f));
-		exp.instructionsController.SetInstructionsColorful();
-		exp.instructionsController.DisplayText(goToLocationInstruction);
+
+		//exp.instructionsController.SetInstructionsColorful();
+		//exp.instructionsController.DisplayText(goToLocationInstruction);
+		exp.uiController.GoToLocation2D.text = currentTrial.desiredItemLocation.name;
+		exp.uiController.GoToInstructions2D.alpha = 1.0f;
 		yield return new WaitForSeconds(3.0f);
 		exp.overheadMap.LockCursor(false);
 		while(!exp.overheadMap.mapCursor.controls.isMoving){ //wait for input 
@@ -377,8 +383,9 @@ public class TrialController : MonoBehaviour {
 		}
 
 		//once player starts moving cursor, turn off instructions
-		exp.instructionsController.SetInstructionsBlank();
-		exp.instructionsController.SetInstructionsTransparentOverlay();
+		//exp.instructionsController.SetInstructionsBlank();
+		//exp.instructionsController.SetInstructionsTransparentOverlay();
+		exp.uiController.GoToInstructions2D.alpha = 0.0f;
 
 		//wait for button press to indicate travel is over
 		yield return StartCoroutine(exp.WaitForActionButton());
