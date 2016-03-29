@@ -17,7 +17,8 @@ public class SyncboxControl : MonoBehaviour {
 	[DllImport ("ASimplePlugin")]
 	private static extern float AddTwoFloats(float f1,float f2);
 	[DllImport ("ASimplePlugin")]
-	private static extern IntPtr OpenUSB();
+	private static extern int OpenUSB();
+	//private static extern IntPtr OpenUSB();
 	[DllImport ("ASimplePlugin")]
 	private static extern IntPtr CloseUSB();
 	[DllImport ("ASimplePlugin")]
@@ -63,6 +64,7 @@ public class SyncboxControl : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+		//UnityEngine.Debug.Log (PrintANumber ());
 		if(Config.isSyncbox){
 			StartCoroutine(ConnectSyncbox());
 		}
@@ -70,9 +72,12 @@ public class SyncboxControl : MonoBehaviour {
 	
 	IEnumerator ConnectSyncbox(){
 		while(!isUSBOpen){
-			string usbOpenFeedback = Marshal.PtrToStringAuto (OpenUSB());
-			UnityEngine.Debug.Log(usbOpenFeedback);
-			if(usbOpenFeedback != "didn't open USB..."){
+			string usbOpenFeedback = "";//Marshal.PtrToStringAuto (OpenUSB());
+			int usbOpenFeedbackInt = OpenUSB();
+			//UnityEngine.Debug.Log(usbOpenFeedback);
+			UnityEngine.Debug.Log("OPENED USB???: " + usbOpenFeedbackInt);
+			//if(usbOpenFeedback != "didn't open USB..."){
+			if(usbOpenFeedbackInt == 1){
 				isUSBOpen = true;
 			}
 			
