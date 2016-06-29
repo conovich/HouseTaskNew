@@ -17,6 +17,8 @@ public class Experiment : MonoBehaviour {
 	public Logger_Threading subjectLog;
 	private string eegLogfile; //gets set based on the current subject in Awake()
 	public Logger_Threading eegLog;
+	string sessionDirectory;
+	public static string sessionStartedFileName = "sessionStarted.txt";
 	public static int sessionID;
 
 	//session controller
@@ -93,7 +95,7 @@ public class Experiment : MonoBehaviour {
 	//TODO: move to logger_threading perhaps? *shrug*
 	void InitLogging(){
 		string subjectDirectory = ExperimentSettings.defaultLoggingPath + ExperimentSettings.currentSubject.name + "/";
-		string sessionDirectory = subjectDirectory + "session_0" + "/";
+		sessionDirectory = subjectDirectory + "session_0" + "/";
 		
 		sessionID = 0;
 		string sessionIDString = "_0";
@@ -101,7 +103,7 @@ public class Experiment : MonoBehaviour {
 		if(!Directory.Exists(subjectDirectory)){
 			Directory.CreateDirectory(subjectDirectory);
 		}
-		while (Directory.Exists(sessionDirectory)) {
+		while (File.Exists(sessionDirectory + sessionStartedFileName)) {
 			sessionID++;
 			
 			sessionIDString = "_" + sessionID.ToString();
@@ -109,11 +111,30 @@ public class Experiment : MonoBehaviour {
 			sessionDirectory = subjectDirectory + "session" + sessionIDString + "/";
 		}
 		
-		Directory.CreateDirectory(sessionDirectory);
+		//delete old files.
+		if(Directory.Exists(sessionDirectory)){
+			DirectoryInfo info = new DirectoryInfo(sessionDirectory);
+			FileInfo[] fileInfo = info.GetFiles();
+			for(int i = 0; i < fileInfo.Length; i++){
+				File.Delete(fileInfo[i].ToString());
+			}
+		}
+		else{ //if directory didn't exist, make it!
+			Directory.CreateDirectory(sessionDirectory);
+		}
 		
 		subjectLog.fileName = sessionDirectory + ExperimentSettings.currentSubject.name + "Log" + ".txt";
 		eegLog.fileName = sessionDirectory + ExperimentSettings.currentSubject.name + "EEGLog" + ".txt";
 	}
+
+
+	//In order to increment the session, this file must be present. Otherwise, the session has not actually started.
+	//This accounts for when we don't successfully connect to hardware -- wouldn't want new session folders.
+	//Gets created in TrialController after any hardware has connected.
+	public void CreateSessionStartedFile(){
+		StreamWriter newSR = new StreamWriter (sessionDirectory + sessionStartedFileName);
+	}
+
 
 
 	// Use this for initialization

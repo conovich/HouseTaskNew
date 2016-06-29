@@ -154,6 +154,11 @@ public class TrialController : MonoBehaviour {
 				exp.uiController.ConnectionUI.alpha = 0.0f;
 			}
 
+
+			//CREATE SESSION STARTED FILE!
+			exp.CreateSessionStartedFile();
+
+
 			//show instructions for exploring, wait for the action button
 			trialLogger.LogInstructionEvent();
 
