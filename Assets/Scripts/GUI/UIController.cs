@@ -8,6 +8,7 @@ public class UIController : MonoBehaviour {
 
 	public CanvasGroup PauseUI;
 	public CanvasGroup ConnectionUI;
+	public Text ConnectionText; //changed in TrialController from "connecting..." to "press start..." etc.
 
 	public CanvasGroup Part1InstructionsUI;
 	public CanvasGroup Part2InstructionsUI;
