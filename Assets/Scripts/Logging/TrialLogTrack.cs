@@ -10,6 +10,7 @@ public class TrialLogTrack : LogTrack {
 	void LateUpdate () {
 		//just log the environment info on the first frame
 		if (ExperimentSettings.isLogging && !firstLog) {
+			LogVersion ();
 			LogEnvironmentDimensions ();
 			firstLog = true;
 		}
@@ -21,6 +22,11 @@ public class TrialLogTrack : LogTrack {
 			LogTrialNum (trialNumber);
 			LogTrialDesiredLocation(trial.desiredItemLocation.name);
 		}
+	}
+
+	void LogVersion(){
+		Debug.Log ("LOGGED VERSION");
+		subjectLog.Log (GameClock.SystemTime_Milliseconds, subjectLog.GetFrameCount (), "Experiment Info" + separator + "VERSION" + separator + Config.BuildVersion.ToString() + separator + Config.VersionNumber);
 	}
 
 	//LOGGED ON THE START OF THE TRIAL.
