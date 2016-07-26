@@ -182,6 +182,8 @@ public class Player : MonoBehaviour {
 			leftArrowsOn = shouldTurnOn;
 		}
 	}
+	//store object collided with in this
+	GameObject currentCollisionObject;
 
 	void OnTriggerEnter(Collider collider){
 		if(collider.tag == "RoomLocator"){
@@ -199,14 +201,29 @@ public class Player : MonoBehaviour {
 
 			myPlayerLog.LogGateCollision(collider.gameObject);
 		}
+		//room objects
+		if(collider.gameObject.tag == "LearningLocator"){
+			exp.scoreController.AddLocatorCollectedPoints();
+
+			myPlayerLog.LogPlayerCollision(collider.gameObject);
+		}
+
+		currentCollisionObject = collider.gameObject;
+
+		//log store collision
+		if (collider.gameObject.tag == "ItemLocation"){
+			myObjLogTrack.LogCollision (collider.gameObject.name);
+
+			myPlayerLog.LogPlayerCollision(collider.gameObject);
+		}
 	}
 
 	public void ResetGatesVisited(){
 		gatesVisitedThisTrial.Clear();
 	}
 
-	GameObject currentCollisionObject;
-	void OnCollisionEnter(Collision collision){
+	void OnCollisionEnter(Collision collision)
+	{
 		if(collision.gameObject.tag == "LearningLocator"){
 			exp.scoreController.AddLocatorCollectedPoints();
 
@@ -214,7 +231,7 @@ public class Player : MonoBehaviour {
 		}
 
 		currentCollisionObject = collision.gameObject;
-		
+
 		//log store collision
 		if (collision.gameObject.tag == "ItemLocation"){
 			myObjLogTrack.LogCollision (collision.gameObject.name);
@@ -222,6 +239,8 @@ public class Player : MonoBehaviour {
 			myPlayerLog.LogPlayerCollision(collision.gameObject);
 		}
 	}
+
+
 
 	public GameObject GetCollisionObject(){
 		return currentCollisionObject;

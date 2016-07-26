@@ -23,7 +23,7 @@ public class Config : MonoBehaviour {
 
 
     //LOCATOR COLLECTION VARIABLES
-	public static float totalLearningTime = 240.0f;
+	public static float totalLearningTime = 40.0f;
 	public static int learningLocatorScore = 50;
 	public static float learningTimeToPassUntilArrows = 180.0f;
 

@@ -156,7 +156,10 @@ public class TrialController : MonoBehaviour {
 
 
 			//CREATE SESSION STARTED FILE!
-			exp.CreateSessionStartedFile();
+
+			//creating session file only if logging is ON
+			if(ExperimentSettings.isLogging)
+				exp.CreateSessionStartedFile();
 
 
 			//show instructions for exploring, wait for the action button
